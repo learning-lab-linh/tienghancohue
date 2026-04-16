@@ -10,6 +10,7 @@ import 'react-notifications/lib/notifications.css';
 import {NotificationContainer, NotificationManager} from 'react-notifications';
 
 const ReadingTest = () => {
+  const TEST_DURATION_SECONDS = 70 * 60;
   const [selectedSet, setSelectedSet] = useState(null);
   const [availableSets, setAvailableSets] = useState([]);
   const [answers, setAnswers] = useState({});
@@ -19,7 +20,7 @@ const ReadingTest = () => {
   const [questions, setQuestions] = useState([]);
   const [showTracking, setShowTracking] = useState(true);
   const [score, setScore] = useState();
-  const [timeLeft, setTimeLeft] = useState(3600);
+  const [timeLeft, setTimeLeft] = useState(TEST_DURATION_SECONDS);
   const [isLoading, setIsLoading] = useState(false);
   const selectedSetNumber =
     availableSets.findIndex((item) => item.setKey === selectedSet) + 1;
@@ -40,7 +41,7 @@ const ReadingTest = () => {
 
   useEffect(() => {
     const timer = setInterval(() => {
-      setTimeLeft((prevTimeLeft) => prevTimeLeft - 1);
+      setTimeLeft((prevTimeLeft) => Math.max(prevTimeLeft - 1, 0));
     }, 1000);
 
     return () => clearInterval(timer);

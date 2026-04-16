@@ -1,8 +1,16 @@
 import React from "react";
 
-const Header = ({ selectedSet, answeredQuestions, handleSubmit, score }) => {
-  const attempt = selectedSet === 1 ? "83" : selectedSet - 1;
+const Header = ({ answeredQuestions, handleSubmit, score, timeLeft = 0 }) => {
   const progress = Math.min(answeredQuestions.length * 2, 100);
+  const formatTime = (seconds) => {
+    const safeSeconds = Math.max(Number(seconds) || 0, 0);
+    const minutes = Math.floor(safeSeconds / 60);
+    const remainingSeconds = safeSeconds % 60;
+
+    return `${minutes.toString().padStart(2, "0")}:${remainingSeconds
+      .toString()
+      .padStart(2, "0")}`;
+  };
 
   return (
     <header className="fixed top-0 z-30 w-full border-b border-slate-200 bg-white/95 backdrop-blur">
@@ -12,7 +20,7 @@ const Header = ({ selectedSet, answeredQuestions, handleSubmit, score }) => {
             한국어 능력시험
           </h1>
           <p className="text-sm font-medium text-slate-500 sm:text-base">
-            {attempt} 제회
+            Thời gian còn lại: {formatTime(timeLeft)}
           </p>
         </div>
 

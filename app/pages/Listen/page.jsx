@@ -10,6 +10,7 @@ import 'react-notifications/lib/notifications.css';
 import { NotificationContainer, NotificationManager } from 'react-notifications';
 import AudioPlayer from "@/app/components/AudioComponent";
 const ListenTest = () => {
+  const TEST_DURATION_SECONDS = 60 * 60;
   const [selectedSet, setSelectedSet] = useState(null);
   const [availableSets, setAvailableSets] = useState([]);
   const [answers, setAnswers] = useState({});
@@ -19,7 +20,7 @@ const ListenTest = () => {
   const [questions, setQuestions] = useState([]);
   const [showTracking, setShowTracking] = useState(true);
   const [score, setScore] = useState();
-  const [timeLeft, setTimeLeft] = useState(3600);
+  const [timeLeft, setTimeLeft] = useState(TEST_DURATION_SECONDS);
   const [audio, setAudio] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const selectedSetNumber =
@@ -27,7 +28,7 @@ const ListenTest = () => {
 
   useEffect(() => {
     const timer = setInterval(() => {
-      setTimeLeft((prevTimeLeft) => prevTimeLeft - 1);
+      setTimeLeft((prevTimeLeft) => Math.max(prevTimeLeft - 1, 0));
     }, 1000);
 
     return () => clearInterval(timer);

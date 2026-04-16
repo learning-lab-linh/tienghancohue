@@ -17,10 +17,10 @@ export const AnswerComponent = ({
       isSelected
         ? showResults
           ? isCorrect
-            ? "border-emerald-300 bg-emerald-50 text-emerald-700"
-            : "border-rose-300 bg-rose-50 text-rose-700"
-          : "border-slate-400 bg-slate-100 text-slate-800"
-        : "border-slate-200 bg-white text-slate-700 hover:border-slate-300 hover:bg-slate-50"
+            ? "border-emerald-600 bg-emerald-100 font-semibold text-emerald-900 shadow-sm ring-2 ring-emerald-200"
+            : "border-rose-600 bg-rose-100 font-semibold text-rose-900 shadow-sm ring-2 ring-rose-200"
+          : "border-blue-600 bg-blue-100 font-semibold text-blue-900 shadow-sm ring-2 ring-blue-200"
+        : "border-slate-300 bg-white text-slate-800 hover:border-slate-400 hover:bg-slate-100"
     }`;
 
   return (

@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 import Reading from "../../json/Reading.json";
 
 const useQuiz = () => {
+  const TEST_DURATION_SECONDS = 60 * 60;
   const [expanded, setExpanded] = useState(false);
   const [selectedSet, setSelectedSet] = useState(null);
   const [answers, setAnswers] = useState({});
@@ -14,11 +15,11 @@ const useQuiz = () => {
   const [questions, setQuestions] = useState([]);
   const [showTracking, setShowTracking] = useState(true);
   const [score, setScore] = useState();
-  const [timeLeft, setTimeLeft] = useState(3600);
+  const [timeLeft, setTimeLeft] = useState(TEST_DURATION_SECONDS);
 
   useEffect(() => {
     const timer = setInterval(() => {
-      setTimeLeft((prevTimeLeft) => prevTimeLeft - 1);
+      setTimeLeft((prevTimeLeft) => Math.max(prevTimeLeft - 1, 0));
     }, 1000);
 
     return () => clearInterval(timer);
