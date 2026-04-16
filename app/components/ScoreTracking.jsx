@@ -1,5 +1,4 @@
-import React from 'react';
-import { Card } from '@mui/material';
+import React from "react";
 
 const ScoreTracking = ({
   showTracking,
@@ -22,76 +21,71 @@ const ScoreTracking = ({
   };
 
   return (
-    <div className="pb-10 bg-white container mx-auto">
+    <div className="rounded-xl border border-slate-200 bg-white p-4 shadow-sm">
       {showTracking && (
-        <div className="text-center">
-          <h5 className="text-lg font-medium text-gray-700">Bảng theo dõi:</h5>
-          <span className="text-gray-500">{formatTime(timeLeft)} phút</span>
-          <ul className="list-none flex flex-wrap">
+        <div>
+          <div className="mb-4 border-b border-slate-100 pb-3">
+            <h5 className="text-base font-semibold text-slate-800">
+              Bảng theo dõi
+            </h5>
+            <span className="text-sm text-slate-500">
+              Thời gian còn lại: {formatTime(timeLeft)}
+            </span>
+          </div>
+          <ul className="grid grid-cols-4 gap-2">
             {questionsSet.map((question, index) => (
-              <li key={question.id} className="m-1 w-3/12">
-                <Card className={`border-b p-1 ${answers[question.id] ? 'bg-green-500' : ''}`}>
-                  <button
-                    className="text-black rounded"
-                    onClick={() => handleJumpToQuestion(question.id)}
-                  >
-                    <span className="ml-1">{question.id}</span>
-                    {answers[question.id] ? (
-                      <span className="font-bold ml-1 bg-green-500 text-white py-2 px-3 rounded-sm ">
-                         {answers[question.id]}
-                      </span>
-                    ) : (
-                      <span className="font-bold text-gray-400 ml-2 rounded-sm ">?</span>
-                    )}
-                  </button>
-                  {index % 5 === 0 && <br />}
-                </Card>
+              <li key={question.id}>
+                <button
+                  className={`w-full rounded-md border px-2 py-1 text-sm transition ${
+                    answers[question.id]
+                      ? "border-emerald-300 bg-emerald-50 text-emerald-700"
+                      : "border-slate-200 bg-slate-50 text-slate-600 hover:border-slate-300"
+                  }`}
+                  onClick={() => handleJumpToQuestion(question.id)}
+                >
+                  {question.id}
+                </button>
               </li>
             ))}
           </ul>
-          <button className="bg-blue-500 text-white px-6 py-3 rounded mt-4 mr-10" onClick={handleSubmit}>
-            Kiểm Tra Đáp Án
+
+          <button
+            className="mt-5 w-full rounded-lg bg-slate-800 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-slate-700"
+            onClick={handleSubmit}
+          >
+            Kiểm tra đáp án
           </button>
         </div>
       )}
 
      {showResults && (
-        <div className="flex justify-center text-center pb-10">
-          <div>
-            <h1 className="text-xl mb-4 mt-8 pt-4 text-gray-500">
-              Chúc mừng bạn: <span className="text-2xl font-bold text-green-600">{score}</span> Điểm
+        <div className="pb-2">
+          <div className="mb-4 rounded-lg bg-emerald-50 px-3 py-3 text-center">
+            <h1 className="text-base text-slate-600">
+              Chúc mừng bạn đạt{" "}
+              <span className="text-xl font-bold text-emerald-600">{score}</span>{" "}
+              điểm
             </h1>
-            <h5 className="text-gray-900">Kiểm Tra đáp án</h5>
-            <p className="text-gray-400 text-sm">Xanh là đúng</p>
-            <p className="text-gray-400 text-sm">Đỏ là sai</p>
-            <ul className="list-none flex flex-wrap">
-              {answeredQuestions && answeredQuestions.map((questionNumber, index) => (
-                <li key={questionNumber} className="m-1 w-3/12">
-                  <Card className="border-b p-1">
-                    <div className="flex">
-                      <button
-                        className="text-black w-20 flex justify-between rounded"
-                        onClick={() => handleJumpToQuestion(questionNumber)}
-                      >
-                        <span className="mr-1">{questionNumber}</span>
-                        <span
-                          className={`${
-                            answers[questionNumber] ===
-                            questions.find((q) => q.id === questionNumber)?.correctAnswer
-                              ? 'bg-green-500'
-                              : 'bg-red-500'
-                          } text-white px-2 rounded font-normal`}
-                        >
-                          {answers[questionNumber]}
-                        </span>
-                      </button>
-                    </div>
-                  </Card>
-                  {index % 5 === 4 && <br />}
+          </div>
+          <h5 className="text-sm font-semibold text-slate-700">Kết quả chi tiết</h5>
+          <p className="text-xs text-slate-500">Xanh: đúng, Đỏ: sai</p>
+          <ul className="mt-3 grid grid-cols-4 gap-2">
+              {answeredQuestions && answeredQuestions.map((questionNumber) => (
+                <li key={questionNumber}>
+                  <button
+                    className={`w-full rounded-md px-2 py-1 text-sm text-white ${
+                      answers[questionNumber] ===
+                      questions.find((q) => q.id === questionNumber)?.correctAnswer
+                        ? "bg-emerald-500"
+                        : "bg-rose-500"
+                    }`}
+                    onClick={() => handleJumpToQuestion(questionNumber)}
+                  >
+                    {questionNumber}
+                  </button>
                 </li>
               ))}
             </ul>
-          </div>
         </div>
       )}
     </div>

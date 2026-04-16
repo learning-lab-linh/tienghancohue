@@ -36,3 +36,11 @@ The easiest way to deploy your Next.js app is to use the [Vercel Platform](https
 Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
 # ThiTracNghiem
 # Test
+
+## Backend SQLite
+
+- Da them API `POST /api/results` de luu ket qua bai lam.
+- Da them API `GET /api/results` de lay lich su ket qua (ho tro query `testType`, `setNumber`, `limit`).
+- File SQLite duoc tao tai `data/app.db`.
+- Da them API `GET /api/questions?testType=listen|reading&setNumber=1..9` de lay cau hoi tu DB.
+- Chay lenh `pnpm db:seed` de import du lieu tu `json/Listen.json` va `json/Reading.json` vao bang `quiz_questions`.

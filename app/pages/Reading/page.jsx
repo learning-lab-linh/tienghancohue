@@ -1,7 +1,6 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import { Card } from "@mui/material";
-import Reading from "../../../json/Reading.json";
 import SetSelection from "../../components/SetSelection";
 import { AnswerComponent } from "../../components/AnswerComponent";
 import QuestionContent from "../../components/QuestionContent";
@@ -12,6 +11,7 @@ import {NotificationContainer, NotificationManager} from 'react-notifications';
 
 const ReadingTest = () => {
   const [selectedSet, setSelectedSet] = useState(null);
+  const [availableSets, setAvailableSets] = useState([]);
   const [answers, setAnswers] = useState({});
   const [answeredQuestions, setAnsweredQuestions] = useState([]);
   const [showResults, setShowResults] = useState(false);
@@ -20,6 +20,24 @@ const ReadingTest = () => {
   const [showTracking, setShowTracking] = useState(true);
   const [score, setScore] = useState();
   const [timeLeft, setTimeLeft] = useState(3600);
+  const [isLoading, setIsLoading] = useState(false);
+  const selectedSetNumber =
+    availableSets.findIndex((item) => item.setKey === selectedSet) + 1;
+
+  useEffect(() => {
+    const fetchSets = async () => {
+      try {
+        const response = await fetch("/api/sets?testType=reading");
+        const payload = await response.json();
+        setAvailableSets(payload.data || []);
+      } catch (error) {
+        console.error("Không thể tải danh sách bộ đề đọc:", error);
+        setAvailableSets([]);
+      }
+    };
+    fetchSets();
+  }, []);
+
   useEffect(() => {
     const timer = setInterval(() => {
       setTimeLeft((prevTimeLeft) => prevTimeLeft - 1);
@@ -29,37 +47,24 @@ const ReadingTest = () => {
   }, []);
 
   useEffect(() => {
-    switch (selectedSet) {
-      case 1:
-        setQuestionsSet(Reading.Reading83);
-        break;
-      case 2:
-        setQuestionsSet(Reading.De1);
-        break;
-      case 3:
-        setQuestionsSet(Reading.De2);
-        break;
-      case 4:
-        setQuestionsSet(Reading.De3);
-        break;
-      case 5:
-        setQuestionsSet(Reading.De4);
-        break;
-      case 6:
-        setQuestionsSet(Reading.De5);
-        break;
-      case 7:
-        setQuestionsSet(Reading.De6);
-        break;
-      case 8:
-        setQuestionsSet(Reading.De7);
-        break;
-      case 9:
-        setQuestionsSet(Reading.De8);
-        break;
-      default:
-        setQuestionsSet(Reading.Reading83);
-    }
+    const fetchQuestions = async () => {
+      if (!selectedSet) return;
+      setIsLoading(true);
+      try {
+        const response = await fetch(
+          `/api/questions?testType=reading&setKey=${selectedSet}`
+        );
+        const payload = await response.json();
+        setQuestionsSet(payload.data || []);
+      } catch (error) {
+        console.error("Không thể tải bộ đề đọc:", error);
+        setQuestionsSet([]);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchQuestions();
   }, [selectedSet]);
 
   useEffect(() => {
@@ -96,22 +101,31 @@ const ReadingTest = () => {
   // console.log(answeredQuestions)
 
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     setShowResults(true);
     setShowTracking(false);
 
-    const incorrectQuestions = answeredQuestions.filter((questionNumber) => {
-      const userAnswer = answers[questionNumber];
-      const correctAnswer = questions.find(
-        (q) => q.id === questionNumber
-      )?.correctAnswer;
-      return userAnswer !== correctAnswer;
-    });
-
     const scores = calculateScore();
-    
+
     setScore(scores);
-    NotificationManager.success(`Số điểm của bạn là ${scores}`, 'Kết quả');
+    try {
+      await fetch("/api/results", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          testType: "reading",
+          setNumber: selectedSetNumber > 0 ? selectedSetNumber : 0,
+          setKey: selectedSet,
+          score: scores,
+          totalQuestions: questions.length,
+          answers,
+        }),
+      });
+    } catch (error) {
+      console.error("Không thể lưu kết quả bài đọc:", error);
+    }
+
+    NotificationManager.success(`Số điểm của bạn là ${scores}`, "Kết quả");
   };
 
   const handleJumpToQuestion = (questionNumber) => {
@@ -120,7 +134,7 @@ const ReadingTest = () => {
   };
 
   if (!selectedSet) {
-    return <SetSelection onSelectSet={setSelectedSet} />;
+    return <SetSelection onSelectSet={setSelectedSet} sets={availableSets} />;
   }
 
   return (
@@ -140,7 +154,8 @@ const ReadingTest = () => {
     selectedSet={selectedSet}
   >
     <NotificationContainer />
-      <div className=" lg:md:mt-32 sm:mt-40 bg-slate-200 w-full topSM">
+      {isLoading && <p className="text-sm text-slate-600">Đang tải đề thi...</p>}
+      <div className="w-full space-y-4">
         {questionsSet.map((question) => {
           const questionNumber = question.id;
           const userAnswer = answers[questionNumber];
@@ -151,11 +166,11 @@ const ReadingTest = () => {
             <Card
               key={questionNumber}
               id={`question${questionNumber}`}
-              className="mb-6 bg-slate-300 rounded-xl"
+              className="rounded-xl border border-slate-200 bg-white p-3 shadow-sm sm:p-4"
             >
               <QuestionContent question={question} questionNumber={questionNumber} />
 
-              <div className="my-4 flex justify-center items-center">
+              <div className="my-4 grid grid-cols-1 gap-2 sm:grid-cols-2">
                 {question.options.map((option, index) => (
                   <AnswerComponent
                     key={index}
@@ -173,19 +188,15 @@ const ReadingTest = () => {
               </div>
 
               {showResults && isIncorrect && (
-                <div className="flex mb-2 justify-center">
-                  <div>
-                    <Card className="flex justify-center mb-1">
-                      Đáp án đúng:{" "}
-                      <span className="text-xl ml-1 text-blue-500">
+                <div className="mt-2 rounded-lg border border-rose-200 bg-rose-50 p-3">
+                  <div className="text-sm text-slate-700">
+                    Đáp án đúng:{" "}
+                    <span className="ml-1 text-base font-bold text-blue-600">
                         {question.correctAnswer}
-                      </span>
-                    </Card>
-                    <p className="text-gray-400 text-md">
-                      Hướng dẫn giải: {question.solution}
-                    </p>
+                    </span>
                   </div>
-                </div>
+                  <p className="mt-1 text-sm text-slate-600">Hướng dẫn giải: {question.solution}</p>
+                  </div>
               )}
             </Card>
           );

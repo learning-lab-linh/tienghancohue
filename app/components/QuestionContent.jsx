@@ -1,20 +1,18 @@
 // components/QuestionContent.js
-import React from 'react';
+import React from "react";
 
 const QuestionContent = ({ question, questionNumber }) => {
   return (
-    <div>
-      <h1 className="mb-2 text-gray-700 ml-4 lg:text-2xl sm:xl mt-4">
+    <div className="rounded-xl border border-slate-200 bg-slate-50 p-3 sm:p-4">
+      <h1 className="mb-3 text-base font-semibold text-slate-700 sm:text-lg">
         {question.type}
       </h1>
-      <div className="container">
-        <div className="flex justify-center">
+      <div className="flex justify-center">
           <img
             src={question.content}
             alt={`Câu hỏi ${questionNumber}`}
-            className="mb-2 lg:p-4 sm:p-0 bg-slate-100 lg:w-10/12 sm:w-full rounded-xl"
+            className="w-full max-w-4xl rounded-lg border border-slate-200 bg-white p-2"
           />
-        </div>
       </div>
     </div>
   );

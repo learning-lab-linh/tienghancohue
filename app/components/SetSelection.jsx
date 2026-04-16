@@ -1,35 +1,65 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
-const SetSelection = ({ onSelectSet }) => {
-  const [selectedSet, setSelectedSet] = useState(1);
+const SetSelection = ({ onSelectSet, sets = [] }) => {
+  const [selectedSet, setSelectedSet] = useState(sets[0]?.setKey || "");
+  useEffect(() => {
+    if (!selectedSet && sets.length) {
+      setSelectedSet(sets[0].setKey);
+    }
+  }, [sets, selectedSet]);
+
+  const selectedLabel =
+    sets.find((item) => item.setKey === selectedSet)?.label || "";
 
   return (
-    <div className="bg-[#e1e8f0] h-screen lg:block text-align bg-gradient-to-r from-pink-500 to-violet-500">
-      <div className="flex justify-center items-center h-full">
-        <div className="bg-white p-8 rounded">
-          <h1 className="text-3xl font-bold mb-4 text-black mx-4">Chọn Bộ Đề Trước Khi Thi</h1>
-          <div className="flex justify-around">
-            <select
-              className="border rounded-md text-gray-700 h-10 mt-8 bg-slate-300 p-2"
-              onChange={(e) => setSelectedSet(Number(e.target.value))}
-            >
-              <option value={1}>Bộ đề 83</option>
-              <option value={2}>Bộ đề 1</option>
-              <option value={3}>Bộ đề 2</option>
-              <option value={4}>Bộ đề 3</option>
-              <option value={5}>Bộ đề 4</option>
-              <option value={6}>Bộ đề 5</option>
-              <option value={7}>Bộ đề 6</option>
-              <option value={8}>Bộ đề 7</option>
-              <option value={9}>Bộ đề 91</option>
-            </select>
-            <button
-              className="bg-blue-500 text-white px-6 py-3 rounded mt-4 ml-8"
-              onClick={() => onSelectSet(selectedSet)}
-            >
-              Bắt đầu Thi
-            </button>
+    <div className="min-h-screen bg-slate-100 px-4 py-8">
+      <div className="flex min-h-screen items-center justify-center">
+        <div className="w-full max-w-2xl overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
+          <div className="border-b border-slate-100 bg-slate-50 px-6 py-4">
+            <p className="text-sm font-medium text-slate-500">TOPIK PRACTICE</p>
+            <h1 className="mt-1 text-2xl font-bold text-slate-800">
+              Chọn Bộ Đề Trước Khi Thi
+            </h1>
+          </div>
+
+          <div className="px-6 py-6">
+            <p className="mb-5 text-sm leading-6 text-slate-600">
+              Chọn đúng bộ đề bạn muốn luyện để bắt đầu bài thi. Mỗi bộ đề sẽ
+              giúp bạn đánh giá kỹ năng nghe theo dạng đề thật.
+            </p>
+
+            <div className="grid gap-4 md:grid-cols-[1fr_auto] md:items-end">
+              <label className="block">
+                <span className="mb-2 block text-sm font-semibold text-slate-700">
+                  Bộ đề luyện tập
+                </span>
+                <select
+                  className="h-11 w-full rounded-lg border border-slate-300 bg-white px-3 text-slate-700 outline-none transition focus:border-slate-500"
+                  value={selectedSet}
+                  onChange={(e) => setSelectedSet(e.target.value)}
+                >
+                  {sets.map((setItem) => (
+                    <option key={setItem.setKey} value={setItem.setKey}>
+                      {setItem.label}
+                    </option>
+                  ))}
+                </select>
+              </label>
+
+              <button
+                className="h-11 rounded-lg bg-slate-800 px-8 text-sm font-semibold text-white transition hover:bg-slate-700"
+                disabled={!selectedSet}
+                onClick={() => onSelectSet(selectedSet)}
+              >
+                Bắt đầu thi
+              </button>
+            </div>
+
+            <div className="mt-5 rounded-lg border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-slate-600">
+              Bạn đang chọn:{" "}
+              <span className="font-semibold text-slate-800">{selectedLabel}</span>
+            </div>
           </div>
         </div>
       </div>
