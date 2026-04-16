@@ -22,7 +22,6 @@
     "@mui/styled-engine-sc": "^6.0.0-alpha.18",
     "axios": "^1.7.2",
     "better-sqlite3": "^12.9.0",
-    "canvas": "^2.11.2",
     "firebase": "^10.8.0",
     "json-server": "^1.0.0-alpha.23",
     "lfs": "^0.0.4",
