@@ -1,6 +1,5 @@
 {
   "Listen83": [
-    
     {
       "id": "1",
       "type": "* [1~2] 다음을 듣고 가장 알맞은 그림 또는 그래프를 고르십시오. (2점)",
@@ -2502,7 +2501,7 @@
         "",
         ""
       ],
-      "correctAnswer": "1",
+      "correctAnswer": "2",
       "solution": "Đang cập nhật....",
       "content": "https://firebasestorage.googleapis.com/v0/b/upload-9ece2.appspot.com/o/Listen4%2Ff4896ca6-7594-4bf2-b9f1-215d3b6149f8?alt=media&token=7cda2196-c084-4826-8589-3c71b5a64a5c"
     },
@@ -6258,6 +6257,658 @@
       "correctAnswer": "4",
       "solution": "Đang cập nhật....",
       "content": "https://firebasestorage.googleapis.com/v0/b/upload-9ece2.appspot.com/o/Listen102%2F89534b0a-f3fc-4f87-8ab5-8d5e606fb23e.png?alt=media&token=29c28730-97fb-4225-a80c-8bafb6daff4a"
+    }
+  ],
+  "Listen96": [
+    {
+      "id": "1",
+      "type": "* [1~2] 다음을 듣고 가장 알맞은 그림 또는 그래프를 고르십시오. (2점)",
+      "options": [
+        "",
+        "",
+        "",
+        ""
+      ],
+      "correctAnswer": "1",
+      "solution": "Đang cập nhật....",
+      "content": "https://firebasestorage.googleapis.com/v0/b/upload-9ece2.appspot.com/o/Listen96%2F1ffeb502-095c-4a0c-a25a-9bf0f63d04c3.png?alt=media&token=610b2041-d028-47c2-a8b4-0e0968b053cb"
+    },
+    {
+      "id": "2",
+      "type": "",
+      "options": [
+        "",
+        "",
+        "",
+        ""
+      ],
+      "correctAnswer": "2",
+      "solution": "Đang cập nhật....",
+      "content": "https://firebasestorage.googleapis.com/v0/b/upload-9ece2.appspot.com/o/Listen96%2F61c99d96-577d-44c0-9596-9e2ac44e8bd9.png?alt=media&token=dac9cbb4-431f-49d9-9004-d79cdfb069e6"
+    },
+    {
+      "id": "3",
+      "type": "",
+      "options": [
+        "",
+        "",
+        "",
+        ""
+      ],
+      "correctAnswer": "2",
+      "solution": "Đang cập nhật....",
+      "content": "https://firebasestorage.googleapis.com/v0/b/upload-9ece2.appspot.com/o/Listen96%2F2a3d7e3f-f032-4ebf-ad83-778d0b0ec0be.png?alt=media&token=1dfef25a-1e60-432b-8a74-58310d2b873b"
+    },
+    {
+      "id": "4",
+      "type": "[4~8] 다음을 듣고  이어질 주 있는 말로 가장 알맞은 것을 고르십시오 . (2점)",
+      "options": [
+        "",
+        "",
+        "",
+        ""
+      ],
+      "correctAnswer": "3",
+      "solution": "Đang cập nhật....",
+      "content": "https://firebasestorage.googleapis.com/v0/b/upload-9ece2.appspot.com/o/Listen96%2Fa00f98af-f13b-4e08-9f72-24c685394d35.png?alt=media&token=9936ce64-ce33-46ba-9333-4e7b0082b955"
+    },
+    {
+      "id": "5",
+      "type": "",
+      "options": [
+        "",
+        "",
+        "",
+        ""
+      ],
+      "correctAnswer": "1",
+      "solution": "Đang cập nhật....",
+      "content": "https://firebasestorage.googleapis.com/v0/b/upload-9ece2.appspot.com/o/Listen96%2F2a810f89-d195-490a-8431-c218f50592eb.png?alt=media&token=50e31ad2-d839-47df-9600-7f7340885b2a"
+    },
+    {
+      "id": "6",
+      "type": "",
+      "options": [
+        "",
+        "",
+        "",
+        ""
+      ],
+      "correctAnswer": "2",
+      "solution": "Đang cập nhật....",
+      "content": "https://firebasestorage.googleapis.com/v0/b/upload-9ece2.appspot.com/o/Listen96%2Fe63bab9e-7ba6-4bf1-b748-02f988c49457.png?alt=media&token=3c9be179-e2f5-4227-9928-82f1c12c6275"
+    },
+    {
+      "id": "7",
+      "type": "",
+      "options": [
+        "",
+        "",
+        "",
+        ""
+      ],
+      "correctAnswer": "4",
+      "solution": "Đang cập nhật....",
+      "content": "https://firebasestorage.googleapis.com/v0/b/upload-9ece2.appspot.com/o/Listen96%2Fd26855bf-b526-4e31-bc58-59c9559b95ea.png?alt=media&token=08240e44-10a9-414a-9222-f4140c02e6ec"
+    },
+    {
+      "id": "8",
+      "type": "",
+      "options": [
+        "",
+        "",
+        "",
+        ""
+      ],
+      "correctAnswer": "3",
+      "solution": "Đang cập nhật....",
+      "content": "https://firebasestorage.googleapis.com/v0/b/upload-9ece2.appspot.com/o/Listen96%2F65ac40f6-31d0-4196-9f95-1640f834dd49.png?alt=media&token=18d870a2-daa3-4366-9208-9b054a19ad72"
+    },
+    {
+      "id": "9",
+      "type": "* [9~12] 다음을 듣고 여자가 이어서 할 행동으로 가장 알맞은 것을고르십시오 .  (각 2점)",
+      "options": [
+        "",
+        "",
+        "",
+        ""
+      ],
+      "correctAnswer": "4",
+      "solution": "Đang cập nhật....",
+      "content": "https://firebasestorage.googleapis.com/v0/b/upload-9ece2.appspot.com/o/Listen96%2F0f1ddca2-a4a8-4400-8188-12404733edf0.png?alt=media&token=fcb97622-0524-4e49-9ba8-c0db19f38d89"
+    },
+    {
+      "id": "10",
+      "type": "",
+      "options": [
+        "",
+        "",
+        "",
+        ""
+      ],
+      "correctAnswer": "2",
+      "solution": "Đang cập nhật....",
+      "content": "https://firebasestorage.googleapis.com/v0/b/upload-9ece2.appspot.com/o/Listen96%2F02d19000-79a2-4432-bb28-db8492251f4c.png?alt=media&token=b237abaf-ab9b-4a5c-8b78-d739b4a1a943"
+    },
+    {
+      "id": "11",
+      "type": "",
+      "options": [
+        "",
+        "",
+        "",
+        ""
+      ],
+      "correctAnswer": "4",
+      "solution": "Đang cập nhật....",
+      "content": "https://firebasestorage.googleapis.com/v0/b/upload-9ece2.appspot.com/o/Listen96%2F11556e45-dcdf-4008-92f7-d7c3d505746b.png?alt=media&token=14547a4a-5615-499d-8465-a63b7f37e9e1"
+    },
+    {
+      "id": "12",
+      "type": "",
+      "options": [
+        "",
+        "",
+        "",
+        ""
+      ],
+      "correctAnswer": "2",
+      "solution": "Đang cập nhật....",
+      "content": "https://firebasestorage.googleapis.com/v0/b/upload-9ece2.appspot.com/o/Listen96%2F434cfc16-dead-493e-aa60-787658ac31de.png?alt=media&token=63ed2105-e04d-43d6-8c66-939076be6bdc"
+    },
+    {
+      "id": "13",
+      "type": "* [13~16] 다음을 듣고 들은 내용과 같은 것을 고르십시오. (각 2점)",
+      "options": [
+        "",
+        "",
+        "",
+        ""
+      ],
+      "correctAnswer": "3",
+      "solution": "Đang cập nhật....",
+      "content": "https://firebasestorage.googleapis.com/v0/b/upload-9ece2.appspot.com/o/Listen96%2F42eb93f9-32a8-483b-a383-436d2a7bf53a.png?alt=media&token=40648be2-89d9-4dc3-b562-d67921da6821"
+    },
+    {
+      "id": "14",
+      "type": "",
+      "options": [
+        "",
+        "",
+        "",
+        ""
+      ],
+      "correctAnswer": "2",
+      "solution": "Đang cập nhật....",
+      "content": "https://firebasestorage.googleapis.com/v0/b/upload-9ece2.appspot.com/o/Listen96%2F99b4c5be-87ba-4639-981f-493d4d4664c5.png?alt=media&token=84543992-24e4-4d63-b7eb-ad540527f946"
+    },
+    {
+      "id": "15",
+      "type": "",
+      "options": [
+        "",
+        "",
+        "",
+        ""
+      ],
+      "correctAnswer": "4",
+      "solution": "Đang cập nhật....",
+      "content": "https://firebasestorage.googleapis.com/v0/b/upload-9ece2.appspot.com/o/Listen96%2Fc3165e31-b4cf-43d4-8ce1-b9c870f53806.png?alt=media&token=ab0563a1-139a-49eb-82b0-238326a8bed6"
+    },
+    {
+      "id": "16",
+      "type": "",
+      "options": [
+        "",
+        "",
+        "",
+        ""
+      ],
+      "correctAnswer": "4",
+      "solution": "Đang cập nhật....",
+      "content": "https://firebasestorage.googleapis.com/v0/b/upload-9ece2.appspot.com/o/Listen96%2Fee420626-bd95-4cfe-9a3f-bd4768e75654.png?alt=media&token=98b4b271-d978-4080-b126-3195701dcc5b"
+    },
+    {
+      "id": "17",
+      "type": "[17~20] 다음을 듣고 남자의  중심 생각으로 가장 알맞은  것을 고르십시오 . (2점)",
+      "options": [
+        "",
+        "",
+        "",
+        ""
+      ],
+      "correctAnswer": "3",
+      "solution": "Đang cập nhật....",
+      "content": "https://firebasestorage.googleapis.com/v0/b/upload-9ece2.appspot.com/o/Listen96%2Fd7ba0164-a39b-4399-9f10-7c65a6938e2d.png?alt=media&token=7a4783c4-b737-4512-b7ce-5951bec10808"
+    },
+    {
+      "id": "18",
+      "type": "",
+      "options": [
+        "",
+        "",
+        "",
+        ""
+      ],
+      "correctAnswer": "1",
+      "solution": "Đang cập nhật....",
+      "content": "https://firebasestorage.googleapis.com/v0/b/upload-9ece2.appspot.com/o/Listen96%2F0528e4c6-7352-4783-a604-0db00e756d92.png?alt=media&token=0749f894-3536-4f07-9581-37ba5a067b49"
+    },
+    {
+      "id": "19",
+      "type": "",
+      "options": [
+        "",
+        "",
+        "",
+        ""
+      ],
+      "correctAnswer": "4",
+      "solution": "Đang cập nhật....",
+      "content": "https://firebasestorage.googleapis.com/v0/b/upload-9ece2.appspot.com/o/Listen96%2F41995370-126e-4ff7-bb99-cc1cb001a980.png?alt=media&token=9e11cf75-fb0c-4c9f-8478-95eae33aa6bc"
+    },
+    {
+      "id": "20",
+      "type": "",
+      "options": [
+        "",
+        "",
+        "",
+        ""
+      ],
+      "correctAnswer": "1",
+      "solution": "Đang cập nhật....",
+      "content": "https://firebasestorage.googleapis.com/v0/b/upload-9ece2.appspot.com/o/Listen96%2F1ada5aaa-713d-42b9-bbc8-1c6a5600b6b5.png?alt=media&token=9aae6279-06d6-43a3-be5c-8cec38d9c27e"
+    },
+    {
+      "id": "21",
+      "type": "* [21~22] 다음을 듣고 물음에 답하십시오. (각 2점)",
+      "options": [
+        "",
+        "",
+        "",
+        ""
+      ],
+      "correctAnswer": "4",
+      "solution": "Đang cập nhật....",
+      "content": "https://firebasestorage.googleapis.com/v0/b/upload-9ece2.appspot.com/o/Listen96%2Fd871be65-8b78-4aac-8319-966754cb3fc9.png?alt=media&token=2e2de58e-6a52-4d2c-ba53-27438fb82cf3"
+    },
+    {
+      "id": "22",
+      "type": "",
+      "options": [
+        "",
+        "",
+        "",
+        ""
+      ],
+      "correctAnswer": "2",
+      "solution": "Đang cập nhật....",
+      "content": "https://firebasestorage.googleapis.com/v0/b/upload-9ece2.appspot.com/o/Listen96%2F6a31f02b-28fe-4abf-ac1c-7d0f1d11c96f.png?alt=media&token=9212dee4-2a23-4093-8273-06edab245b89"
+    },
+    {
+      "id": "23",
+      "type": "[23~24] 다음을 읽고 물음에 답하십시오. (각 2점)",
+      "options": [
+        "",
+        "",
+        "",
+        ""
+      ],
+      "correctAnswer": "4",
+      "solution": "Đang cập nhật....",
+      "content": "https://firebasestorage.googleapis.com/v0/b/upload-9ece2.appspot.com/o/Listen96%2F09174a67-b8d1-4dcd-a0ab-46138d285efb.png?alt=media&token=67f5bbc2-7a28-44a1-a5c3-d7b10bbfea14"
+    },
+    {
+      "id": "24",
+      "type": "",
+      "options": [
+        "",
+        "",
+        "",
+        ""
+      ],
+      "correctAnswer": "2",
+      "solution": "Đang cập nhật....",
+      "content": "https://firebasestorage.googleapis.com/v0/b/upload-9ece2.appspot.com/o/Listen96%2F2fdd4e81-0fc1-4fec-813d-1fe2ec6dd93f.png?alt=media&token=8676514d-a563-4e76-9f79-4af1d8cfa6fb"
+    },
+    {
+      "id": "25",
+      "type": "",
+      "options": [
+        "",
+        "",
+        "",
+        ""
+      ],
+      "correctAnswer": "1",
+      "solution": "Đang cập nhật....",
+      "content": "https://firebasestorage.googleapis.com/v0/b/upload-9ece2.appspot.com/o/Listen96%2F6fcfea63-861f-4176-abd6-8d98d213fba6.png?alt=media&token=c764f7b2-4374-4f5e-ad92-ff4be88ead22"
+    },
+    {
+      "id": "26",
+      "type": "",
+      "options": [
+        "",
+        "",
+        "",
+        ""
+      ],
+      "correctAnswer": "1",
+      "solution": "Đang cập nhật....",
+      "content": "https://firebasestorage.googleapis.com/v0/b/upload-9ece2.appspot.com/o/Listen96%2F6177c685-d97d-4e8c-aa32-ae1d36619c39.png?alt=media&token=4ffb9e90-596b-4c42-9dce-22988238d099"
+    },
+    {
+      "id": "27",
+      "type": "",
+      "options": [
+        "",
+        "",
+        "",
+        ""
+      ],
+      "correctAnswer": "2",
+      "solution": "Đang cập nhật....",
+      "content": "https://firebasestorage.googleapis.com/v0/b/upload-9ece2.appspot.com/o/Listen96%2F1fb21a95-93ea-41ef-a9cf-f81c164785a8.png?alt=media&token=8f49e778-d75a-479d-9681-d2dd30c97ac9"
+    },
+    {
+      "id": "28",
+      "type": "",
+      "options": [
+        "",
+        "",
+        "",
+        ""
+      ],
+      "correctAnswer": "3",
+      "solution": "Đang cập nhật....",
+      "content": "https://firebasestorage.googleapis.com/v0/b/upload-9ece2.appspot.com/o/Listen96%2F5b484c3d-bb56-4b37-a405-52fb634bf6fa.png?alt=media&token=a1957c59-7b35-42d2-9353-63f53a91df73"
+    },
+    {
+      "id": "29",
+      "type": "",
+      "options": [
+        "",
+        "",
+        "",
+        ""
+      ],
+      "correctAnswer": "1",
+      "solution": "Đang cập nhật....",
+      "content": "https://firebasestorage.googleapis.com/v0/b/upload-9ece2.appspot.com/o/Listen96%2F246d9131-37f5-45c2-8e14-281cd4a7725e.png?alt=media&token=320cdf58-3830-4057-9f12-54f2298593c5"
+    },
+    {
+      "id": "30",
+      "type": "",
+      "options": [
+        "",
+        "",
+        "",
+        ""
+      ],
+      "correctAnswer": "2",
+      "solution": "Đang cập nhật....",
+      "content": "https://firebasestorage.googleapis.com/v0/b/upload-9ece2.appspot.com/o/Listen96%2F2e5331f8-e035-49f9-b46e-e6aa0ab7ee7e.png?alt=media&token=0a359ba0-bd51-4649-9d46-8e7960f808eb"
+    },
+    {
+      "id": "31",
+      "type": "",
+      "options": [
+        "",
+        "",
+        "",
+        ""
+      ],
+      "correctAnswer": "4",
+      "solution": "Đang cập nhật....",
+      "content": "https://firebasestorage.googleapis.com/v0/b/upload-9ece2.appspot.com/o/Listen96%2F33baab7a-f379-4c64-8e14-38de02c35162.png?alt=media&token=095f180d-3493-46c2-b147-f5e28206b46c"
+    },
+    {
+      "id": "32",
+      "type": "",
+      "options": [
+        "",
+        "",
+        "",
+        ""
+      ],
+      "correctAnswer": "3",
+      "solution": "Đang cập nhật....",
+      "content": "https://firebasestorage.googleapis.com/v0/b/upload-9ece2.appspot.com/o/Listen96%2Ff001077e-ffc8-4fd6-b865-162d2218b4e2.png?alt=media&token=fb53016b-ce08-4467-9fac-45a478a3277f"
+    },
+    {
+      "id": "33",
+      "type": "",
+      "options": [
+        "",
+        "",
+        "",
+        ""
+      ],
+      "correctAnswer": "3",
+      "solution": "Đang cập nhật....",
+      "content": "https://firebasestorage.googleapis.com/v0/b/upload-9ece2.appspot.com/o/Listen96%2F63faa385-9e0e-4f05-97f3-1aedd997c372.png?alt=media&token=baa0fbed-8e25-4bcf-b5e5-9b98dd3e872e"
+    },
+    {
+      "id": "34",
+      "type": "",
+      "options": [
+        "",
+        "",
+        "",
+        ""
+      ],
+      "correctAnswer": "1",
+      "solution": "Đang cập nhật....",
+      "content": "https://firebasestorage.googleapis.com/v0/b/upload-9ece2.appspot.com/o/Listen96%2Fe5513e1a-41d4-4f58-a9c3-e97cdcc6f656.png?alt=media&token=5d3802ee-bcc1-4566-8d98-4cbddc0d28b2"
+    },
+    {
+      "id": "35",
+      "type": "* [35~38] 다음을 읽고 글의 내용과 같은 것을 고르십시오. (각 2점)",
+      "options": [
+        "",
+        "",
+        "",
+        ""
+      ],
+      "correctAnswer": "1",
+      "solution": "Đang cập nhật....",
+      "content": "https://firebasestorage.googleapis.com/v0/b/upload-9ece2.appspot.com/o/Listen96%2F3b677325-da1a-41c9-8ca9-5dedd4d02380.png?alt=media&token=7415f93a-28d2-422e-850e-aa51b7e03c30"
+    },
+    {
+      "id": "36",
+      "type": "",
+      "options": [
+        "",
+        "",
+        "",
+        ""
+      ],
+      "correctAnswer": "4",
+      "solution": "Đang cập nhật....",
+      "content": "https://firebasestorage.googleapis.com/v0/b/upload-9ece2.appspot.com/o/Listen96%2Fffeaee05-e982-4169-9dca-aedd4ac944bf.png?alt=media&token=206b21fa-95f1-4d1f-a82c-a66591d2f7c8"
+    },
+    {
+      "id": "37",
+      "type": "",
+      "options": [
+        "",
+        "",
+        "",
+        ""
+      ],
+      "correctAnswer": "3",
+      "solution": "Đang cập nhật....",
+      "content": "https://firebasestorage.googleapis.com/v0/b/upload-9ece2.appspot.com/o/Listen96%2Fec94a970-6ceb-4102-8345-9d48ca361f3d.png?alt=media&token=89b87620-afdb-4031-840d-2238813fc624"
+    },
+    {
+      "id": "38",
+      "type": "",
+      "options": [
+        "",
+        "",
+        "",
+        ""
+      ],
+      "correctAnswer": "2",
+      "solution": "Đang cập nhật....",
+      "content": "https://firebasestorage.googleapis.com/v0/b/upload-9ece2.appspot.com/o/Listen96%2F0d1f40bb-da84-436e-b6d8-71def2dd1115.png?alt=media&token=961f54ca-1fae-4922-a85f-539ada2fecf2"
+    },
+    {
+      "id": "39",
+      "type": "",
+      "options": [
+        "",
+        "",
+        "",
+        ""
+      ],
+      "correctAnswer": "4",
+      "solution": "Đang cập nhật....",
+      "content": "https://firebasestorage.googleapis.com/v0/b/upload-9ece2.appspot.com/o/Listen96%2Fee4df027-9cee-4299-bab8-4969ea7799de.png?alt=media&token=c24fde45-7b74-49dc-a983-2ae3f5b69ea2"
+    },
+    {
+      "id": "40",
+      "type": "",
+      "options": [
+        "",
+        "",
+        "",
+        ""
+      ],
+      "correctAnswer": "3",
+      "solution": "Đang cập nhật....",
+      "content": "https://firebasestorage.googleapis.com/v0/b/upload-9ece2.appspot.com/o/Listen96%2F5f1b952b-a60b-4fab-bbb6-7c0c51b0f4bc.png?alt=media&token=2c0bd614-ecc1-45bc-8d3f-24bcdd141987"
+    },
+    {
+      "id": "41",
+      "type": "",
+      "options": [
+        "",
+        "",
+        "",
+        ""
+      ],
+      "correctAnswer": "3",
+      "solution": "Đang cập nhật....",
+      "content": "https://firebasestorage.googleapis.com/v0/b/upload-9ece2.appspot.com/o/Listen96%2F98969c89-ac00-463d-a7d7-49c3324294de.png?alt=media&token=1eb50b8d-4fce-4e69-9fab-b425a236ff28"
+    },
+    {
+      "id": "42",
+      "type": "",
+      "options": [
+        "",
+        "",
+        "",
+        ""
+      ],
+      "correctAnswer": "2",
+      "solution": "Đang cập nhật....",
+      "content": "https://firebasestorage.googleapis.com/v0/b/upload-9ece2.appspot.com/o/Listen96%2Ffe3acfab-868a-43e2-8ef8-28f7480b17df.png?alt=media&token=e29c3b53-5d7f-4639-9b2b-16cb5dd6c228"
+    },
+    {
+      "id": "43",
+      "type": "",
+      "options": [
+        "",
+        "",
+        "",
+        ""
+      ],
+      "correctAnswer": "1",
+      "solution": "Đang cập nhật....",
+      "content": "https://firebasestorage.googleapis.com/v0/b/upload-9ece2.appspot.com/o/Listen96%2Ff93e859f-8dbd-4a1f-b78d-68dc3039e277.png?alt=media&token=18330e0d-3b78-491c-96dc-b5c5423b32a4"
+    },
+    {
+      "id": "44",
+      "type": "",
+      "options": [
+        "",
+        "",
+        "",
+        ""
+      ],
+      "correctAnswer": "4",
+      "solution": "Đang cập nhật....",
+      "content": "https://firebasestorage.googleapis.com/v0/b/upload-9ece2.appspot.com/o/Listen96%2F2fa782f8-f17a-4458-8c7f-c1f9ee1032e8.png?alt=media&token=86369e2d-66bd-4994-a85c-fd4579f0b34e"
+    },
+    {
+      "id": "45",
+      "type": "",
+      "options": [
+        "",
+        "",
+        "",
+        ""
+      ],
+      "correctAnswer": "4",
+      "solution": "Đang cập nhật....",
+      "content": "https://firebasestorage.googleapis.com/v0/b/upload-9ece2.appspot.com/o/Listen96%2F0108c537-ad2c-431e-a968-4c1df4d9f094.png?alt=media&token=7d6f1596-5c19-44b8-8c66-0d29538e52db"
+    },
+    {
+      "id": "46",
+      "type": "",
+      "options": [
+        "",
+        "",
+        "",
+        ""
+      ],
+      "correctAnswer": "3",
+      "solution": "Đang cập nhật....",
+      "content": "https://firebasestorage.googleapis.com/v0/b/upload-9ece2.appspot.com/o/Listen96%2F962c6588-d10b-4b94-aa10-2812d96c5aa8.png?alt=media&token=73fd7fd8-c30f-4a95-858f-f02fe79c187a"
+    },
+    {
+      "id": "47",
+      "type": "",
+      "options": [
+        "",
+        "",
+        "",
+        ""
+      ],
+      "correctAnswer": "3",
+      "solution": "Đang cập nhật....",
+      "content": "https://firebasestorage.googleapis.com/v0/b/upload-9ece2.appspot.com/o/Listen96%2F6dad5ec5-3c0a-4e26-a019-ec685edca663.png?alt=media&token=3ced5322-a4d9-4e53-b8b3-38b8e8853a9c"
+    },
+    {
+      "id": "48",
+      "type": "* [48~50] [48~50] 다음을 읽고 물음에 답하십시오. (각 2점)",
+      "options": [
+        "",
+        "",
+        "",
+        ""
+      ],
+      "correctAnswer": "3",
+      "solution": "Đang cập nhật....",
+      "content": "https://firebasestorage.googleapis.com/v0/b/upload-9ece2.appspot.com/o/Listen96%2F00aa10d0-c7d0-47d1-91b6-dc85b1985763.png?alt=media&token=fea3679b-f910-425e-9f82-32aacaaaa777"
+    },
+    {
+      "id": "49",
+      "type": "",
+      "options": [
+        "",
+        "",
+        "",
+        ""
+      ],
+      "correctAnswer": "4",
+      "solution": "Đang cập nhật....",
+      "content": "https://firebasestorage.googleapis.com/v0/b/upload-9ece2.appspot.com/o/Listen96%2Fec798679-a533-499a-af70-9c81e71d0314.png?alt=media&token=2af77b64-ec8c-4c9a-b47d-7e04d6f0dc5c"
+    },
+    {
+      "id": "50",
+      "type": "",
+      "options": [
+        "",
+        "",
+        "",
+        ""
+      ],
+      "correctAnswer": "1",
+      "solution": "Đang cập nhật....",
+      "content": "https://firebasestorage.googleapis.com/v0/b/upload-9ece2.appspot.com/o/Listen96%2Fb41d06eb-129f-4f80-9c3d-a4c22d8b8f76.png?alt=media&token=c0653f41-9f96-4d77-a009-d93f3bf1fc19"
     }
   ]
 }
