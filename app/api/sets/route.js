@@ -6,6 +6,7 @@ import {
   getMaxDisplayOrder,
   getListenAudioFallbackBySetKey,
 } from "@/lib/quizSetsMeta";
+import { requireAdmin } from "@/lib/adminAuth";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -52,6 +53,8 @@ export async function GET(request) {
 }
 
 export async function POST(request) {
+  const denied = await requireAdmin(request);
+  if (denied) return denied;
   const body = await request.json();
   const { testType, setKey, label, audioUrl } = body;
 

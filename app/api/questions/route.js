@@ -8,6 +8,7 @@ import {
   getListenAudioFallbackBySetKey,
 } from "@/lib/quizSetsMeta";
 import { getSetKey } from "@/lib/testSets";
+import { requireAdmin } from "@/lib/adminAuth";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -58,6 +59,8 @@ export async function GET(request) {
 }
 
 export async function PUT(request) {
+  const denied = await requireAdmin(request);
+  if (denied) return denied;
   const body = await request.json();
   const {
     testType,

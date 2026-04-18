@@ -310,6 +310,11 @@ export default function TaoDePage() {
 
   const missingImages = rows.filter((r) => !r.content && !r.file).length;
 
+  const logout = async () => {
+    await fetch("/api/admin/logout", { method: "POST" });
+    window.location.href = "/admin/login";
+  };
+
   return (
     <main className="min-h-screen bg-gradient-to-b from-slate-100 via-slate-50 to-white p-4 text-black sm:p-8">
       <div className="mx-auto max-w-6xl space-y-6">
@@ -340,6 +345,13 @@ export default function TaoDePage() {
             >
               Trang thi
             </Link>
+            <button
+              type="button"
+              onClick={logout}
+              className="rounded-xl border border-rose-200 bg-rose-50 px-4 py-2 text-sm font-medium text-rose-900 hover:bg-rose-100"
+            >
+              Đăng xuất
+            </button>
           </div>
         </header>
 

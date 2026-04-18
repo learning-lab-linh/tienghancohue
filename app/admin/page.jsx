@@ -213,6 +213,11 @@ export default function AdminPage() {
     );
   };
 
+  const logout = async () => {
+    await fetch("/api/admin/logout", { method: "POST" });
+    window.location.href = "/admin/login";
+  };
+
   const handleUploadImage = async (event) => {
     const file = event.target.files?.[0];
     if (!file) return;
@@ -275,6 +280,13 @@ export default function AdminPage() {
               >
                 Quay lại trang thi
               </Link>
+              <button
+                type="button"
+                onClick={logout}
+                className="rounded-xl border border-rose-200 bg-rose-50 px-4 py-2 text-sm font-medium text-rose-900 transition hover:bg-rose-100"
+              >
+                Đăng xuất
+              </button>
             </div>
           </div>
           <div className="mt-5 grid gap-3 sm:grid-cols-3">
@@ -322,7 +334,6 @@ export default function AdminPage() {
             </select>
           </div>
           {errorSets && <p className="mb-3 text-sm font-medium text-rose-700">{errorSets}</p>}
-=
           {loadingQuestions ? (
             <p className="text-sm text-slate-600">Đang tải câu hỏi...</p>
           ) : errorQuestions ? (
