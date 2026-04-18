@@ -1,8 +1,7 @@
 'use client'
-import { useState, useEffect } from "react";
-import Reading from "../../json/Reading.json";
+import { useState, useEffect, useCallback } from "react";
 
-const useQuiz = () => {
+const useQuiz = (testType = "reading") => {
   const TEST_DURATION_SECONDS = 60 * 60;
   const [expanded, setExpanded] = useState(false);
   const [selectedSet, setSelectedSet] = useState(null);
@@ -16,6 +15,8 @@ const useQuiz = () => {
   const [showTracking, setShowTracking] = useState(true);
   const [score, setScore] = useState();
   const [timeLeft, setTimeLeft] = useState(TEST_DURATION_SECONDS);
+  const [isLoading, setIsLoading] = useState(false);
+  const [audio, setAudio] = useState("");
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -26,42 +27,55 @@ const useQuiz = () => {
   }, []);
 
   useEffect(() => {
-    switch (selectedSet) {
-      case 1:
-        setQuestionsSet(Reading.Reading83);
-        break;
-      case 2:
-        setQuestionsSet(Reading.De1);
-        break;
-      case 3:
-        setQuestionsSet(Reading.De2);
-        break;
-      case 4:
-        setQuestionsSet(Reading.De3);
-        break;
-      case 5:
-        setQuestionsSet(Reading.De4);
-        break;
-      case 6:
-        setQuestionsSet(Reading.De5);
-        break;
-      case 7:
-        setQuestionsSet(Reading.De6);
-        break;
-      case 8:
-        setQuestionsSet(Reading.De7);
-        break;
-      case 9:
-        setQuestionsSet(Reading.De8);
-        break;
-      default:
-        setQuestionsSet(Reading.Reading83);
-    }
-  }, [selectedSet]);
+    const fetchQuestions = async () => {
+      if (selectedSet == null || selectedSet === "") {
+        setQuestionsSet([]);
+        return;
+      }
+
+      const setNum = Number(selectedSet);
+      const params = new URLSearchParams({
+        testType,
+        ...(Number.isInteger(setNum) && setNum > 0
+          ? { setNumber: String(setNum) }
+          : { setKey: String(selectedSet) }),
+      });
+
+      setIsLoading(true);
+      try {
+        const response = await fetch(`/api/questions?${params}`);
+        const payload = await response.json();
+        setQuestionsSet(payload.data || []);
+        if (testType === "listen") {
+          setAudio(payload.audio || "");
+        }
+      } catch (error) {
+        console.error("Không thể tải câu hỏi:", error);
+        setQuestionsSet([]);
+        setAudio("");
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchQuestions();
+  }, [selectedSet, testType]);
 
   useEffect(() => {
     setQuestions(questionsSet);
   }, [questionsSet]);
+
+  const calculateScore = useCallback(() => {
+    const scorePerQuestion = 2;
+    return answeredQuestions.reduce((totalScore, questionNumber) => {
+      const userAnswer = answers[questionNumber];
+      const correctAnswer = questions.find(
+        (q) => String(q.id) === String(questionNumber)
+      )?.correctAnswer;
+      const ok = userAnswer === correctAnswer;
+      return totalScore + (ok ? scorePerQuestion : 0);
+    }, 0);
+  }, [answeredQuestions, answers, questions]);
 
   const handleAnswerChange = (questionNumber, selectedAnswer) => {
     setAnswers((prevAnswers) => ({
@@ -80,11 +94,16 @@ const useQuiz = () => {
   const handleSubmit = () => {
     setShowResults(true);
     setShowTracking(false);
-    const scores = calculateScore(questions, answers, answeredQuestions);
+    const scores = calculateScore();
     alert(scores);
     setScore(scores);
     setIsCorrect(
-      answeredQuestions.filter((qn) => answers[qn] !== questions.find((q) => q.id === qn)?.correctAnswer).length === 0
+      answeredQuestions.filter((qn) => {
+        const correct = questions.find(
+          (q) => String(q.id) === String(qn)
+        )?.correctAnswer;
+        return answers[qn] !== correct;
+      }).length === 0
     );
   };
 
@@ -118,9 +137,12 @@ const useQuiz = () => {
     setScore,
     timeLeft,
     setTimeLeft,
+    isLoading,
+    audio,
     handleAnswerChange,
     handleSubmit,
     handleJumpToQuestion,
+    calculateScore,
   };
 };
 

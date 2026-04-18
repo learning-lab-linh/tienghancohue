@@ -15,7 +15,7 @@ const QuestionContent = ({ question, questionNumber }) => {
           <img
             src={question.content}
             alt={`Câu hỏi ${questionNumber}`}
-            className="h-auto max-w-full cursor-zoom-in rounded-lg border border-slate-200 bg-white p-1"
+            className="h-auto max-w-full cursor-zoom-in rounded-lg "
             onClick={() => setIsZoomed(true)}
           />
         </div>
@@ -29,7 +29,7 @@ const QuestionContent = ({ question, questionNumber }) => {
           <img
             src={question.content}
             alt={`Phóng to câu hỏi ${questionNumber}`}
-            className="h-auto max-h-[92vh] w-auto max-w-[96vw] rounded-lg border border-slate-300 bg-white"
+            className="h-auto max-h-[92vh] w-auto max-w-[96vw] rounded-lg   bg-slate-100"
           />
         </div>
       )}

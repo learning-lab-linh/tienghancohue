@@ -21,7 +21,7 @@ const ScoreTracking = ({
   };
 
   return (
-    <div className="rounded-xl border border-slate-200 bg-white p-4 shadow-sm">
+    <div className="rounded-xl border border-slate-200 bg-slate-100 p-4 shadow-sm">
       {showTracking && (
         <div>
           <div className="mb-4 border-b border-slate-100 pb-3">
@@ -39,7 +39,7 @@ const ScoreTracking = ({
                   className={`w-full rounded-md border px-2 py-1 text-sm transition ${
                     answers[question.id]
                       ? "border-emerald-300 bg-emerald-50 text-emerald-700"
-                      : "border-slate-200 bg-slate-50 text-slate-600 hover:border-slate-300"
+                      : "border-slate-200 bg-slate-100 text-slate-600 hover:border-slate-300"
                   }`}
                   onClick={() => handleJumpToQuestion(question.id)}
                 >

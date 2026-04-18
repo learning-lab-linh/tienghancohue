@@ -15,9 +15,9 @@ const SetSelection = ({ onSelectSet, sets = [] }) => {
   return (
     <div className="min-h-screen bg-slate-100 px-4 py-8">
       <div className="flex min-h-screen items-center justify-center">
-        <div className="w-full max-w-2xl overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
-          <div className="border-b border-slate-100 bg-slate-50 px-6 py-4">
-            <p className="text-sm font-medium text-slate-500">TOPIK PRACTICE</p>
+        <div className="w-full max-w-2xl overflow-hidden rounded-2xl border border-slate-200 bg-slate-100 shadow-sm">
+          <div className="border-b border-slate-200 bg-slate-100 px-6 py-4">
+            <p className="text-sm font-medium text-slate-500">Ôn luyện TOPIK</p>
             <h1 className="mt-1 text-2xl font-bold text-slate-800">
               Chọn Bộ Đề Trước Khi Thi
             </h1>
@@ -26,7 +26,7 @@ const SetSelection = ({ onSelectSet, sets = [] }) => {
           <div className="px-6 py-6">
             <p className="mb-5 text-sm leading-6 text-slate-600">
               Chọn đúng bộ đề bạn muốn luyện để bắt đầu bài thi. Mỗi bộ đề sẽ
-              giúp bạn đánh giá kỹ năng nghe theo dạng đề thật.
+              giúp bạn đánh giá kỹ năng theo dạng đề thật.
             </p>
 
             <div className="grid gap-4 md:grid-cols-[1fr_auto] md:items-end">
@@ -35,7 +35,7 @@ const SetSelection = ({ onSelectSet, sets = [] }) => {
                   Bộ đề luyện tập
                 </span>
                 <select
-                  className="h-11 w-full rounded-lg border border-slate-300 bg-white px-3 text-slate-700 outline-none transition focus:border-slate-500"
+                  className="h-11 w-full rounded-lg border border-slate-300 bg-slate-100 px-3 text-slate-700 outline-none transition focus:border-slate-500"
                   value={selectedSet}
                   onChange={(e) => setSelectedSet(e.target.value)}
                 >
@@ -56,7 +56,7 @@ const SetSelection = ({ onSelectSet, sets = [] }) => {
               </button>
             </div>
 
-            <div className="mt-5 rounded-lg border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-slate-600">
+            <div className="mt-5 rounded-lg border border-slate-200 bg-slate-100 px-4 py-3 text-sm text-slate-600">
               Bạn đang chọn:{" "}
               <span className="font-semibold text-slate-800">{selectedLabel}</span>
             </div>

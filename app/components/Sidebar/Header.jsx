@@ -13,7 +13,7 @@ const Header = ({ answeredQuestions, handleSubmit, score, timeLeft = 0 }) => {
   };
 
   return (
-    <header className="fixed top-0 z-30 w-full border-b border-slate-200 bg-white/95 backdrop-blur">
+    <header className="fixed top-0 z-30 w-full border-b border-slate-200 bg-slate-100/95 backdrop-blur">
       <div className="mx-auto flex max-w-[1400px] items-center justify-between px-4 py-3 sm:px-6 lg:px-8">
         <div>
           <h1 className="text-xl font-bold tracking-tight text-slate-900 sm:text-2xl">

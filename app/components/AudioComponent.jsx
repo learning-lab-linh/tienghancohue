@@ -31,7 +31,7 @@ const AudioPlayer = ({ audio }) => {
   return (
     <div className="fixed bottom-5 right-4 z-50">
       {audio ? (
-        <div className="rounded-2xl border border-slate-200 bg-white/95 p-3 shadow-lg backdrop-blur">
+        <div className="rounded-2xl border border-slate-200 bg-slate-100/95 p-3 shadow-lg backdrop-blur">
           <audio ref={audioRef} onEnded={handleEnded}>
             <source src={audio} type="audio/mp3" />
             Your browser does not support the audio element.
@@ -48,7 +48,7 @@ const AudioPlayer = ({ audio }) => {
               {isPlaying ? <IoIosPause className="text-2xl" /> : <FaPlay className="ml-0.5 text-sm" />}
             </button>
             <button
-              className="flex h-11 w-11 items-center justify-center rounded-full border border-slate-300 bg-white text-slate-700 transition hover:bg-slate-100"
+              className="flex h-11 w-11 items-center justify-center rounded-full border border-slate-300 bg-slate-100 text-slate-700 transition hover:bg-slate-200"
               onClick={handleReplay}
               title="Phát lại từ đầu"
             >

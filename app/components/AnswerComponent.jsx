@@ -12,15 +12,15 @@ export const AnswerComponent = ({
 }) => {
   const isSelected = userAnswer === (optionIndex + 1).toString();
   const isCorrect = correctAnswer === (optionIndex + 1).toString();
-  const labelClassNames = `block w-full rounded-lg border px-4 py-2 text-left text-sm transition sm:text-base
+  const labelClassNames = `block w-full rounded-lg bg-slate-100 border border-slate-200 px-4 py-2 text-left text-sm transition sm:text-base
     ${
       isSelected
         ? showResults
           ? isCorrect
-            ? "border-emerald-600 bg-emerald-100 font-semibold text-emerald-900 shadow-sm ring-2 ring-emerald-200"
-            : "border-rose-600 bg-rose-100 font-semibold text-rose-900 shadow-sm ring-2 ring-rose-200"
-          : "border-blue-600 bg-blue-100 font-semibold text-blue-900 shadow-sm ring-2 ring-blue-200"
-        : "border-slate-300 bg-white text-slate-800 hover:border-slate-400 hover:bg-slate-100"
+            ? "border-emerald-500 bg-emerald-100 font-semibold text-emerald-900"
+            : "border-rose-500 bg-rose-100 font-semibold text-rose-900"
+          : "border-blue-500 bg-blue-100 font-semibold text-blue-900"
+        : "bg-slate-100 text-slate-800  "
     }`;
 
   return (

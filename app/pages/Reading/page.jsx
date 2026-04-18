@@ -1,6 +1,5 @@
 "use client";
 import React, { useState, useEffect } from "react";
-import { Card } from "@mui/material";
 import SetSelection from "../../components/SetSelection";
 import { AnswerComponent } from "../../components/AnswerComponent";
 import QuestionContent from "../../components/QuestionContent";
@@ -164,10 +163,10 @@ const ReadingTest = () => {
             userAnswer && userAnswer !== question.correctAnswer;
 
           return (
-            <Card
+            <div
               key={questionNumber}
               id={`question${questionNumber}`}
-              className="rounded-xl border border-slate-200 bg-white p-3 shadow-sm sm:p-4"
+              className="scroll-mt-28"
             >
               <QuestionContent question={question} questionNumber={questionNumber} />
 
@@ -199,7 +198,7 @@ const ReadingTest = () => {
                   <p className="mt-1 text-sm text-slate-600">Hướng dẫn giải: {question.solution}</p>
                   </div>
               )}
-            </Card>
+            </div>
           );
         })}
       </div>
