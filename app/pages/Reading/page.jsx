@@ -171,7 +171,7 @@ const ReadingTest = () => {
             >
               <QuestionContent question={question} questionNumber={questionNumber} />
 
-              <div className="my-4 grid grid-cols-1 gap-2 sm:grid-cols-2">
+              <div className="my-4 grid grid-cols-2 gap-2">
                 {question.options.map((option, index) => (
                   <AnswerComponent
                     key={index}
