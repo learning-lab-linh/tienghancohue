@@ -1,6 +1,13 @@
 import { NextResponse } from "next/server";
-import db from "@/lib/sqlite";
-import { getSetKey, LISTEN_AUDIO_BY_SET } from "@/lib/testSets";
+import {
+  readJsonPayload,
+  writeJsonPayload,
+} from "@/lib/examTemplateClone";
+import {
+  readQuizSetsMeta,
+  getListenAudioFallbackBySetKey,
+} from "@/lib/quizSetsMeta";
+import { getSetKey } from "@/lib/testSets";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -19,46 +26,34 @@ export async function GET(request) {
   }
 
   const setKey = rawSetKey || getSetKey(testType, setNumber);
-
-  const setMeta = db
-    .prepare(
-      "SELECT audio_url AS audioUrl FROM quiz_sets WHERE test_type = @testType AND set_key = @setKey"
-    )
-    .get({ testType, setKey });
-
-  const rows = db
-    .prepare(
-      `
-      SELECT
-        question_id AS id,
-        question_type AS type,
-        content,
-        options_json AS optionsJson,
-        correct_answer AS correctAnswer,
-        solution
-      FROM quiz_questions
-      WHERE test_type = @testType AND set_key = @setKey
-      ORDER BY question_id ASC
-      `
-    )
-    .all({ testType, setKey });
+  const payload = readJsonPayload(testType);
+  const rows = Array.isArray(payload[setKey]) ? payload[setKey] : [];
 
   const questions = rows.map((row) => ({
     id: String(row.id),
     type: row.type || "",
     content: row.content || "",
-    options: row.optionsJson ? JSON.parse(row.optionsJson) : [],
+    options: Array.isArray(row.options) ? row.options : [],
     correctAnswer: row.correctAnswer || "",
     solution: row.solution || "",
   }));
 
+  const meta = readQuizSetsMeta();
+  const bucket = testType === "listen" ? meta.listen : meta.reading;
+  const metaRow = bucket[setKey];
+
+  let audio = "";
+  if (testType === "listen") {
+    audio =
+      (metaRow?.audioUrl && String(metaRow.audioUrl).trim()) ||
+      getListenAudioFallbackBySetKey(setKey) ||
+      "";
+  }
+
   return NextResponse.json({
     data: questions,
     setKey,
-    audio:
-      testType === "listen"
-        ? setMeta?.audioUrl || LISTEN_AUDIO_BY_SET[setNumber] || ""
-        : "",
+    audio,
   });
 }
 
@@ -98,37 +93,35 @@ export async function PUT(request) {
   }
 
   const setKey = rawSetKey || getSetKey(testType, resolvedSetNumber);
+  const payload = readJsonPayload(testType);
+  const list = payload[setKey];
+  if (!Array.isArray(list)) {
+    return NextResponse.json(
+      { error: "Không tìm thấy bộ đề trong JSON" },
+      { status: 404 }
+    );
+  }
 
-  const updateResult = db
-    .prepare(
-      `
-      UPDATE quiz_questions
-      SET
-        question_type = @type,
-        content = @content,
-        options_json = @optionsJson,
-        correct_answer = @correctAnswer,
-        solution = @solution
-      WHERE test_type = @testType AND set_key = @setKey AND question_id = @questionId
-      `
-    )
-    .run({
-      type: type || "",
-      content: content || "",
-      optionsJson: JSON.stringify(options),
-      correctAnswer: correctAnswer || "",
-      solution: solution || "",
-      testType,
-      setKey,
-      questionId,
-    });
-
-  if (updateResult.changes === 0) {
+  const idx = list.findIndex((q) => Number(q.id) === questionId);
+  if (idx === -1) {
     return NextResponse.json(
       { error: "Không tìm thấy câu hỏi để cập nhật" },
       { status: 404 }
     );
   }
+
+  list[idx] = {
+    ...list[idx],
+    id: String(questionId),
+    type: type || "",
+    content: content || "",
+    options,
+    correctAnswer: correctAnswer || "",
+    solution: solution || "",
+  };
+
+  payload[setKey] = list;
+  writeJsonPayload(testType, payload);
 
   return NextResponse.json({ message: "Cập nhật câu hỏi thành công" });
 }

@@ -37,10 +37,9 @@ Check out our [Next.js deployment documentation](https://nextjs.org/docs/deploym
 # ThiTracNghiem
 # Test
 
-## Backend SQLite
+## Du lieu (JSON)
 
-- Da them API `POST /api/results` de luu ket qua bai lam.
-- Da them API `GET /api/results` de lay lich su ket qua (ho tro query `testType`, `setNumber`, `limit`).
-- File SQLite duoc tao tai `data/app.db`.
-- Da them API `GET /api/questions?testType=listen|reading&setNumber=1..9` de lay cau hoi tu DB.
-- Chay lenh `pnpm db:seed` de import du lieu tu `json/Listen.json` va `json/Reading.json` vao bang `quiz_questions`.
+- Cau hoi: `json/Listen.json`, `json/Reading.json`.
+- Metadata bộ đề (tên, audio nghe): `json/quiz-sets.json`.
+- Lịch sử điểm: `json/quiz-results.json`.
+- API `GET/POST /api/results`, `GET/PUT /api/questions`, `GET/POST /api/sets` doc/ghi cac file tren (khong dung SQLite).

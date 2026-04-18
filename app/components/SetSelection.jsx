@@ -9,8 +9,12 @@ const SetSelection = ({ onSelectSet, sets = [] }) => {
     }
   }, [sets, selectedSet]);
 
-  const selectedLabel =
-    sets.find((item) => item.setKey === selectedSet)?.label || "";
+  const selected = sets.find((item) => item.setKey === selectedSet);
+  const selectedLabel = selected?.label || "";
+  const selectedAudioUrl =
+    selected?.audioUrl && String(selected.audioUrl).trim()
+      ? String(selected.audioUrl).trim()
+      : "";
 
   return (
     <div className="min-h-screen bg-slate-100 px-4 py-8">
@@ -42,6 +46,7 @@ const SetSelection = ({ onSelectSet, sets = [] }) => {
                   {sets.map((setItem) => (
                     <option key={setItem.setKey} value={setItem.setKey}>
                       {setItem.label}
+                      {setItem.setKey ? ` — ${setItem.setKey}` : ""}
                     </option>
                   ))}
                 </select>
@@ -56,10 +61,29 @@ const SetSelection = ({ onSelectSet, sets = [] }) => {
               </button>
             </div>
 
-            <div className="mt-5 rounded-lg border border-slate-200 bg-slate-100 px-4 py-3 text-sm text-slate-600">
-              Bạn đang chọn:{" "}
-              <span className="font-semibold text-slate-800">{selectedLabel}</span>
-            </div>
+            {/* <div className="mt-5 space-y-3 rounded-lg border border-slate-200 bg-slate-100 px-4 py-3 text-sm text-slate-600">
+              <div>
+                Bạn đang chọn:{" "}
+                <span className="font-semibold text-slate-800">
+                  {selectedLabel}
+                </span>
+                {selectedSet ? (
+                  <span className="ml-2 font-mono text-xs text-slate-500">
+                    ({selectedSet})
+                  </span>
+                ) : null}
+              </div>
+              {selectedAudioUrl ? (
+                <div className="border-t border-slate-200 pt-3">
+                  <audio
+                    className="h-9 w-full max-w-md"
+                    controls
+                    preload="none"
+                    src={selectedAudioUrl}
+                  />
+                </div>
+              ) : null}
+            </div> */}
           </div>
         </div>
       </div>

@@ -1,39 +1,14 @@
 import { NextResponse } from "next/server";
-import db from "@/lib/sqlite";
+import { readJsonPayload } from "@/lib/examTemplateClone";
+import {
+  readQuizSetsMeta,
+  writeQuizSetsMeta,
+  getMaxDisplayOrder,
+  getListenAudioFallbackBySetKey,
+} from "@/lib/quizSetsMeta";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
-
-function ensureDefaultSets(testType) {
-  const hasAny = db
-    .prepare("SELECT COUNT(*) AS count FROM quiz_sets WHERE test_type = ?")
-    .get(testType);
-
-  if (hasAny.count > 0) return;
-
-  const discovered = db
-    .prepare(
-      `
-      SELECT set_key AS setKey
-      FROM quiz_questions
-      WHERE test_type = ?
-      GROUP BY set_key
-      ORDER BY set_key ASC
-      `
-    )
-    .all(testType);
-
-  const insert = db.prepare(
-    `
-    INSERT OR IGNORE INTO quiz_sets (test_type, set_key, label, display_order)
-    VALUES (?, ?, ?, ?)
-    `
-  );
-
-  discovered.forEach((item, idx) => {
-    insert.run(testType, item.setKey, item.setKey, idx + 1);
-  });
-}
 
 export async function GET(request) {
   const { searchParams } = new URL(request.url);
@@ -46,22 +21,32 @@ export async function GET(request) {
     );
   }
 
-  ensureDefaultSets(testType);
+  const payload = readJsonPayload(testType);
+  const meta = readQuizSetsMeta();
+  const bucket = testType === "listen" ? meta.listen : meta.reading;
 
-  const sets = db
-    .prepare(
-      `
-      SELECT
-        set_key AS setKey,
-        label,
-        audio_url AS audioUrl,
-        display_order AS displayOrder
-      FROM quiz_sets
-      WHERE test_type = @testType
-      ORDER BY display_order ASC, set_key ASC
-      `
-    )
-    .all({ testType });
+  const keysFromQuestions = Object.keys(payload).filter((k) =>
+    Array.isArray(payload[k])
+  );
+  const allKeys = new Set([...keysFromQuestions, ...Object.keys(bucket)]);
+
+  const sets = [...allKeys].map((setKey) => {
+    const m = bucket[setKey] || {};
+    const label = m.label || setKey;
+    let audioUrl = m.audioUrl || "";
+    if (testType === "listen" && !String(audioUrl).trim()) {
+      audioUrl = getListenAudioFallbackBySetKey(setKey);
+    }
+    const displayOrder =
+      typeof m.displayOrder === "number" ? m.displayOrder : 9999;
+    return { setKey, label, audioUrl, displayOrder };
+  });
+
+  sets.sort((a, b) => {
+    if (a.displayOrder !== b.displayOrder)
+      return a.displayOrder - b.displayOrder;
+    return a.setKey.localeCompare(b.setKey);
+  });
 
   return NextResponse.json({ data: sets });
 }
@@ -84,33 +69,28 @@ export async function POST(request) {
     );
   }
 
-  const exists = db
-    .prepare(
-      "SELECT 1 FROM quiz_sets WHERE test_type = @testType AND set_key = @setKey"
-    )
-    .get({ testType, setKey });
-  if (exists) {
+  const payload = readJsonPayload(testType);
+  if (payload[setKey]) {
+    return NextResponse.json(
+      { error: "Set đã tồn tại trong file JSON" },
+      { status: 409 }
+    );
+  }
+
+  const meta = readQuizSetsMeta();
+  const bucket = testType === "listen" ? meta.listen : meta.reading;
+  if (bucket[setKey]) {
     return NextResponse.json({ error: "Set đã tồn tại" }, { status: 409 });
   }
 
-  const maxOrder = db
-    .prepare(
-      "SELECT COALESCE(MAX(display_order), 0) AS maxOrder FROM quiz_sets WHERE test_type = ?"
-    )
-    .get(testType);
-
-  db.prepare(
-    `
-    INSERT INTO quiz_sets (test_type, set_key, label, audio_url, display_order)
-    VALUES (@testType, @setKey, @label, @audioUrl, @displayOrder)
-    `
-  ).run({
-    testType,
-    setKey,
+  const displayOrder = getMaxDisplayOrder(testType) + 1;
+  bucket[setKey] = {
     label,
-    audioUrl: audioUrl || "",
-    displayOrder: maxOrder.maxOrder + 1,
-  });
+    audioUrl: testType === "listen" ? audioUrl || "" : "",
+    displayOrder,
+  };
+  meta[testType === "listen" ? "listen" : "reading"] = bucket;
+  writeQuizSetsMeta(meta);
 
   return NextResponse.json({ message: "Tạo đề mới thành công" }, { status: 201 });
 }

@@ -262,12 +262,20 @@ export default function AdminPage() {
                 Quản lý bộ đề, ảnh câu hỏi và đáp án trong cùng một nơi.
               </p>
             </div>
-            <Link
-              href="/pages/Select"
-              className="rounded-xl border border-slate-300 bg-white px-4 py-2 text-sm font-medium text-black transition hover:bg-slate-100"
-            >
-              Quay lại trang thi
-            </Link>
+            <div className="flex flex-wrap gap-2">
+              <Link
+                href="/admin/tao-de"
+                className="rounded-xl border border-indigo-200 bg-indigo-50 px-4 py-2 text-sm font-medium text-indigo-800 transition hover:bg-indigo-100"
+              >
+                Tạo đề mới (template)
+              </Link>
+              <Link
+                href="/pages/Select"
+                className="rounded-xl border border-slate-300 bg-white px-4 py-2 text-sm font-medium text-black transition hover:bg-slate-100"
+              >
+                Quay lại trang thi
+              </Link>
+            </div>
           </div>
           <div className="mt-5 grid gap-3 sm:grid-cols-3">
             <div className="rounded-2xl border border-slate-200 bg-slate-50 p-4">
@@ -285,35 +293,7 @@ export default function AdminPage() {
           </div>
         </section>
 
-        <section className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
-          <h2 className="mb-4 text-lg font-semibold">Lịch sử kết quả</h2>
-          {loadingResults ? (
-            <p className="text-sm text-slate-600">Đang tải...</p>
-          ) : (
-            <div className="overflow-x-auto rounded-2xl border border-slate-200">
-              <table className="min-w-full text-sm">
-                <thead className="bg-slate-50">
-                  <tr className="border-b border-slate-200">
-                    <th className="px-3 py-2 text-left">Loại bài</th>
-                    <th className="px-3 py-2 text-left">Bộ đề</th>
-                    <th className="px-3 py-2 text-left">Điểm</th>
-                    <th className="px-3 py-2 text-left">Thời gian</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {results.map((r) => (
-                    <tr key={r.id} className="border-b border-slate-100 last:border-b-0">
-                      <td className="px-3 py-2">{r.testType}</td>
-                      <td className="px-3 py-2">{r.setNumber}</td>
-                      <td className="px-3 py-2 font-semibold">{r.score}</td>
-                      <td className="px-3 py-2">{r.createdAt}</td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          )}
-        </section>
+    
 
         <section className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
           <div className="mb-4 flex flex-wrap gap-3">
@@ -342,43 +322,7 @@ export default function AdminPage() {
             </select>
           </div>
           {errorSets && <p className="mb-3 text-sm font-medium text-rose-700">{errorSets}</p>}
-
-          <div className="mb-5 rounded-2xl border border-slate-200 bg-slate-50 p-4">
-            <h3 className="mb-3 text-sm font-semibold">Tạo bộ đề mới</h3>
-            <div className="grid gap-3 md:grid-cols-3">
-              <input
-                className="h-11 rounded-xl border border-slate-300 bg-white px-3 text-sm text-black placeholder:text-gray-500"
-                placeholder="Mã đề (setKey)"
-                value={newSetForm.setKey}
-                onChange={(e) => setNewSetForm((p) => ({ ...p, setKey: e.target.value }))}
-              />
-              <input
-                className="h-11 rounded-xl border border-slate-300 bg-white px-3 text-sm text-black placeholder:text-gray-500"
-                placeholder="Tên bộ đề"
-                value={newSetForm.label}
-                onChange={(e) => setNewSetForm((p) => ({ ...p, label: e.target.value }))}
-              />
-              <input
-                className="h-11 rounded-xl border border-slate-300 bg-white px-3 text-sm text-black placeholder:text-gray-500"
-                placeholder="Đường dẫn audio (chỉ nghe)"
-                value={newSetForm.audioUrl}
-                onChange={(e) =>
-                  setNewSetForm((p) => ({ ...p, audioUrl: e.target.value }))
-                }
-              />
-            </div>
-            <div className="mt-3 flex items-center gap-3">
-              <button
-                type="button"
-                onClick={createSet}
-                className="rounded-xl bg-indigo-600 px-4 py-2 text-sm font-semibold text-white transition hover:bg-indigo-500"
-              >
-                {creatingSet ? "Đang tạo..." : "Tạo bộ đề"}
-              </button>
-              {createSetMessage && <p className="text-sm">{createSetMessage}</p>}
-            </div>
-          </div>
-
+=
           {loadingQuestions ? (
             <p className="text-sm text-slate-600">Đang tải câu hỏi...</p>
           ) : errorQuestions ? (
