@@ -46,7 +46,6 @@ const SetSelection = ({ onSelectSet, sets = [] }) => {
                   {sets.map((setItem) => (
                     <option key={setItem.setKey} value={setItem.setKey}>
                       {setItem.label}
-                      {setItem.setKey ? ` — ${setItem.setKey}` : ""}
                     </option>
                   ))}
                 </select>

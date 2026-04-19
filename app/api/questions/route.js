@@ -6,8 +6,8 @@ import {
 import {
   readQuizSetsMeta,
   getListenAudioFallbackBySetKey,
+  getSetKey,
 } from "@/lib/quizSetsMeta";
-import { getSetKey } from "@/lib/testSets";
 import { requireAdmin } from "@/lib/adminAuth";
 
 export const runtime = "nodejs";

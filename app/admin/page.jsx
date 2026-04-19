@@ -328,7 +328,7 @@ export default function AdminPage() {
               {!selectedSetKey && <option value="">Chọn bộ đề</option>}
               {sets.map((s) => (
                 <option key={s.setKey} value={s.setKey}>
-                  {s.label} ({s.setKey})
+                  {s.label}
                 </option>
               ))}
             </select>
