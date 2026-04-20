@@ -16,13 +16,13 @@ export async function GET(request) {
   try {
     const { searchParams } = new URL(request.url);
     const includeArchived = searchParams.get("includeArchived") === "1";
-    const data = listClasses({ includeArchived });
-    const counts = countMembersByClassIds(data.map((c) => c.id));
+    const data = await listClasses({ includeArchived });
+    const counts = await countMembersByClassIds(data.map((c) => c.id));
     const enriched = data.map((c) => ({
       ...c,
       studentCount: counts.get(c.id) ?? 0,
     }));
-    const totalStudentCount = countDistinctMemberEmails();
+    const totalStudentCount = await countDistinctMemberEmails();
     return NextResponse.json({ data: enriched, totalStudentCount });
   } catch (error) {
     console.error("GET /api/admin/classes failed", error);
@@ -52,7 +52,13 @@ export async function POST(request) {
     const schoolYear = String(body.schoolYear ?? "").trim().slice(0, 80);
     const teacher = String(body.teacher ?? "").trim().slice(0, 120);
 
-    const row = createClass({ name, description, schedule, schoolYear, teacher });
+    const row = await createClass({
+      name,
+      description,
+      schedule,
+      schoolYear,
+      teacher,
+    });
     return NextResponse.json(
       { data: { ...row, studentCount: 0 } },
       { status: 201 }
@@ -61,8 +67,7 @@ export async function POST(request) {
     console.error("POST /api/admin/classes failed", error);
     return NextResponse.json(
       {
-        error:
-          "Không thể tạo lớp trên môi trường hiện tại. Nếu đang chạy trên Vercel, hãy dùng database/KV thay vì ghi file JSON.",
+        error: "Không thể tạo lớp. Vui lòng thử lại.",
       },
       { status: 500 }
     );

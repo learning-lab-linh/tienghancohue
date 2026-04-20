@@ -37,9 +37,12 @@ Check out our [Next.js deployment documentation](https://nextjs.org/docs/deploym
 # ThiTracNghiem
 # Test
 
-## Du lieu (JSON)
+## Du lieu
 
-- Cau hoi: `json/Listen.json`, `json/Reading.json`.
-- Metadata bộ đề (tên, audio nghe): `json/quiz-sets.json`.
-- Lịch sử điểm: `json/quiz-results.json`.
-- API `GET/POST /api/results`, `GET/PUT /api/questions`, `GET/POST /api/sets` doc/ghi cac file tren (khong dung SQLite).
+- Du lieu dong luu tren Supabase:
+  - Lop hoc: `classes`
+  - Hoc vien theo lop: `class_members`
+  - Ket qua lam bai: `quiz_results`
+  - Bo de: `topik_sets`
+  - Cau hoi bo de: `topik_questions`
+- Chay SQL trong `supabase/schema.sql` tren Supabase SQL Editor truoc khi test API.

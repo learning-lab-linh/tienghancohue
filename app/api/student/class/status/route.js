@@ -27,6 +27,6 @@ export async function GET(request) {
     return NextResponse.json({ loggedIn: true, enrolled: false });
   }
 
-  const enrolled = hasAnyMembershipForEmail(email);
+  const enrolled = await hasAnyMembershipForEmail(email);
   return NextResponse.json({ loggedIn: true, enrolled });
 }

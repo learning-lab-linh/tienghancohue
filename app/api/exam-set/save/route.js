@@ -1,6 +1,9 @@
 import { NextResponse } from "next/server";
-import { readJsonPayload, writeJsonPayload } from "@/lib/examTemplateClone";
-import { readQuizSetsMeta, writeQuizSetsMeta } from "@/lib/quizSetsMeta";
+import {
+  getTopikSetByKey,
+  replaceTopikQuestions,
+  updateTopikSetAudio,
+} from "@/lib/topikSupabase";
 import { requireAdmin } from "@/lib/adminAuth";
 
 export const runtime = "nodejs";
@@ -35,43 +38,37 @@ export async function POST(request) {
       const options = Array.isArray(q.options) ? [...q.options] : ["", "", "", ""];
       while (options.length < 4) options.push("");
       return {
-        id: String(id),
+        id,
         type: q.type ?? "",
         options: options.slice(0, 4),
         correctAnswer:
           String(q.correctAnswer ?? "1").replace(/[^1-4]/g, "") || "1",
-        solution: q.solution || "Đang cập nhật....",
+        solution: q.solution || "Dang cap nhat....",
         content: typeof q.content === "string" ? q.content : "",
       };
     });
 
-    normalized.sort((a, b) => Number(a.id) - Number(b.id));
-
-    const jsonPayload = readJsonPayload(testType);
-    if (!jsonPayload[setKey]) {
+    normalized.sort((a, b) => a.id - b.id);
+    const setMeta = await getTopikSetByKey(testType, setKey);
+    if (!setMeta) {
       return NextResponse.json(
-        { error: "Chưa có đề trong JSON — hãy tạo khung trước." },
+        { error: "Chưa có đề — hãy tạo khung trước." },
         { status: 404 }
       );
     }
 
-    jsonPayload[setKey] = normalized;
-    writeJsonPayload(testType, jsonPayload);
+    await replaceTopikQuestions({
+      testType,
+      setKey,
+      questions: normalized,
+    });
 
     if (testType === "listen" && typeof audioUrl === "string") {
-      const meta = readQuizSetsMeta();
-      const bucket = meta.listen;
-      const prev = bucket[setKey] || {};
-      bucket[setKey] = {
-        ...prev,
-        audioUrl: audioUrl.trim(),
-      };
-      meta.listen = bucket;
-      writeQuizSetsMeta(meta);
+      await updateTopikSetAudio({ testType, setKey, audioUrl: audioUrl.trim() });
     }
 
     return NextResponse.json({
-      message: "Đã lưu JSON.",
+      message: "Đã lưu dữ liệu bộ đề.",
       count: normalized.length,
     });
   } catch (error) {

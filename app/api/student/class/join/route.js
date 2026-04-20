@@ -39,7 +39,7 @@ export async function POST(request) {
       );
     }
 
-    const cls = getClassByJoinCode(code);
+    const cls = await getClassByJoinCode(code);
     if (!cls) {
       return NextResponse.json(
         { error: "Mã lớp không đúng hoặc lớp đã lưu trữ." },
@@ -47,7 +47,7 @@ export async function POST(request) {
       );
     }
 
-    upsertClassMember(cls.id, email);
+    await upsertClassMember(cls.id, email);
 
     const secret = getStudentSessionSecret();
     const { value, maxAgeSec } = await createStudentClassCookieValue(

@@ -513,7 +513,7 @@ export default function AdminBoDeSetDetailPage() {
                   </p>
                 ) : (
                   <p className="text-zinc-500">
-                    Lưu để ghi vào file JSON trên máy chủ.
+                    Lưu để ghi vào Supabase.
                   </p>
                 )}
               </div>

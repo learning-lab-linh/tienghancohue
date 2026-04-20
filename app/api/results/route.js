@@ -34,7 +34,7 @@ export async function GET(request) {
   const setNumber = searchParams.get("setNumber");
   const limit = Number(searchParams.get("limit") || 20);
 
-  const rows = listResults({
+  const rows = await listResults({
     testType,
     setNumber,
     limit,
@@ -62,7 +62,7 @@ export async function POST(request) {
 
   const studentEmail = actor.isAdmin ? undefined : actor.email;
 
-  const { id } = appendResult({
+  const { id } = await appendResult({
     testType,
     setNumber,
     score,

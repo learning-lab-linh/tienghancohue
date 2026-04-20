@@ -45,7 +45,7 @@ export async function POST(request) {
     });
 
     const em = claims.email?.trim().toLowerCase();
-    if (em && hasAnyMembershipForEmail(em)) {
+    if (em && (await hasAnyMembershipForEmail(em))) {
       const classCookie = await createStudentClassCookieValue(secret, em);
       res.cookies.set(
         STUDENT_CLASS_COOKIE,

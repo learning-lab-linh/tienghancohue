@@ -18,36 +18,44 @@ export async function GET(request, context) {
   const denied = await requireAdmin(request);
   if (denied) return denied;
 
-  const id = context.params?.id;
-  const row = getClassById(id);
-  if (!row) {
-    return NextResponse.json({ error: "Không tìm thấy lớp." }, { status: 404 });
-  }
-  const members = listMembersForClass(row.id);
-  const memberEmails = members.map((m) => m.email);
-  const orphanAttributionEmail =
-    members.length === 1 ? memberEmails[0] : null;
-  const quizByEmail = summarizeResultsForEmails(memberEmails, {
-    orphanAttributionEmail,
-  });
-  const membersWithDetails = members.map((m) => ({
-    ...m,
-    quiz: quizByEmail[m.email] ?? null,
-  }));
-  const orphanResultsCount = countResultsWithoutStudentEmail();
+  try {
+    const id = context.params?.id;
+    const row = await getClassById(id);
+    if (!row) {
+      return NextResponse.json({ error: "Không tìm thấy lớp." }, { status: 404 });
+    }
+    const members = await listMembersForClass(row.id);
+    const memberEmails = members.map((m) => m.email);
+    const orphanAttributionEmail =
+      members.length === 1 ? memberEmails[0] : null;
+    const quizByEmail = await summarizeResultsForEmails(memberEmails, {
+      orphanAttributionEmail,
+    });
+    const membersWithDetails = members.map((m) => ({
+      ...m,
+      quiz: quizByEmail[m.email] ?? null,
+    }));
+    const orphanResultsCount = await countResultsWithoutStudentEmail();
 
-  return NextResponse.json({
-    data: {
-      ...row,
-      studentCount: getStudentCountForClass(row.id),
-      members: membersWithDetails,
-      quizMeta: {
-        orphanResultsCount,
-        /** Kết quả không email đã được cộng vào email này (chỉ khi lớp 1 học viên). */
-        orphanAttributedToEmail: orphanAttributionEmail,
+    return NextResponse.json({
+      data: {
+        ...row,
+        studentCount: await getStudentCountForClass(row.id),
+        members: membersWithDetails,
+        quizMeta: {
+          orphanResultsCount,
+          /** Kết quả không email đã được cộng vào email này (chỉ khi lớp 1 học viên). */
+          orphanAttributedToEmail: orphanAttributionEmail,
+        },
       },
-    },
-  });
+    });
+  } catch (error) {
+    console.error("GET /api/admin/classes/[id] failed", error);
+    return NextResponse.json(
+      { error: "Không thể tải chi tiết lớp. Vui lòng thử lại." },
+      { status: 500 }
+    );
+  }
 }
 
 export async function PATCH(request, context) {
@@ -56,7 +64,7 @@ export async function PATCH(request, context) {
 
   try {
     const id = context.params?.id;
-    const existing = getClassById(id);
+    const existing = await getClassById(id);
     if (!existing) {
       return NextResponse.json({ error: "Không tìm thấy lớp." }, { status: 404 });
     }
@@ -96,16 +104,19 @@ export async function PATCH(request, context) {
       );
     }
 
-    const row = updateClass(id, patch);
+    const row = await updateClass(id, patch);
+    if (!row) {
+      return NextResponse.json({ error: "Không tìm thấy lớp." }, { status: 404 });
+    }
     return NextResponse.json({
-      data: { ...row, studentCount: getStudentCountForClass(row.id) },
+      data: { ...row, studentCount: await getStudentCountForClass(row.id) },
     });
   } catch (error) {
     console.error("PATCH /api/admin/classes/[id] failed", error);
     return NextResponse.json(
       {
         error:
-          "Không thể cập nhật lớp trên môi trường hiện tại. Nếu đang chạy trên Vercel, hãy dùng database/KV thay vì ghi file JSON.",
+          "Không thể cập nhật lớp. Vui lòng thử lại.",
       },
       { status: 500 }
     );
@@ -118,18 +129,18 @@ export async function DELETE(request, context) {
 
   try {
     const id = context.params?.id;
-    const ok = deleteClass(id);
+    const ok = await deleteClass(id);
     if (!ok) {
       return NextResponse.json({ error: "Không tìm thấy lớp." }, { status: 404 });
     }
-    deleteMembersForClass(id);
+    await deleteMembersForClass(id);
     return NextResponse.json({ ok: true });
   } catch (error) {
     console.error("DELETE /api/admin/classes/[id] failed", error);
     return NextResponse.json(
       {
         error:
-          "Không thể xóa lớp trên môi trường hiện tại. Nếu đang chạy trên Vercel, hãy dùng database/KV thay vì ghi file JSON.",
+          "Không thể xóa lớp. Vui lòng thử lại.",
       },
       { status: 500 }
     );

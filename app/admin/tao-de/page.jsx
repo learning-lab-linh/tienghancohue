@@ -269,7 +269,7 @@ export default function TaoDePage() {
         });
       }
 
-      setUploadProgress("Đang lưu JSON…");
+      setUploadProgress("Đang lưu Supabase…");
       const response = await fetch("/api/exam-set/save", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -323,7 +323,7 @@ export default function TaoDePage() {
             <code className="rounded bg-rose-50 px-1">Reading91</code> (type + 4 lựa
             chọn rỗng). Đề <strong>nghe</strong>: sau khi tạo khung, nhập 50 ảnh
             (Firebase) và 50 đáp án; lưu vào{" "}
-            <code className="rounded bg-rose-50 px-1">json/</code>.
+            <code className="rounded bg-rose-50 px-1">Supabase</code>.
           </p>
         </header>
 
@@ -338,8 +338,8 @@ export default function TaoDePage() {
                   value={testType}
                   onChange={(e) => setTestType(e.target.value)}
                 >
-                  <option value="listen">Nghe (Listen.json + Listen83 template)</option>
-                  <option value="reading">Đọc (Reading.json + Reading91 template)</option>
+                  <option value="listen">Nghe (template Listen83)</option>
+                  <option value="reading">Đọc (template Reading91)</option>
                 </select>
               </label>
               <label className="text-sm font-medium">
@@ -427,7 +427,7 @@ export default function TaoDePage() {
                   disabled={saving}
                   className="rounded-xl bg-[#e5441a] px-5 py-2.5 text-sm font-semibold text-white shadow-md hover:bg-[#cf3c15] disabled:opacity-60"
                 >
-                  {saving ? "Đang xử lý…" : "Upload Firebase & lưu JSON"}
+                  {saving ? "Đang xử lý…" : "Upload Firebase & lưu Supabase"}
                 </button>
               </div>
             </div>
@@ -572,10 +572,9 @@ export default function TaoDePage() {
             <p className="mt-3 text-xs text-gray-500">
               Ảnh được đưa lên Firebase Storage (đường dẫn{" "}
               <code className="rounded bg-rose-50 px-1">{`{mã đề}/uuid...`}</code>
-              ). Lưu cập nhật file{" "}
-              <code className="rounded bg-rose-50 px-1">json/Listen.json</code> hoặc{" "}
-              <code className="rounded bg-rose-50 px-1">Reading.json</code> và{" "}
-              <code className="rounded bg-rose-50 px-1">quiz-sets.json</code> (metadata bộ đề / audio nghe).
+              ). Lưu cập nhật vào bảng{" "}
+              <code className="rounded bg-rose-50 px-1">topik_questions</code> và{" "}
+              <code className="rounded bg-rose-50 px-1">topik_sets</code> (metadata bộ đề / audio nghe).
             </p>
           </section>
         )}

@@ -10,6 +10,7 @@
     "dev": "next dev ",
     "server": "json-server --watch Listen.json --port 4000",
     "db:seed": "node scripts/seed-questions.mjs",
+    "db:migrate:topik": "node scripts/migrate-topik-to-supabase.mjs",
     "build": "next build",
     "start": "next start",
     "lint": "next lint"
@@ -21,6 +22,8 @@
     "@mui/icons-material": "^5.15.17",
     "@mui/material": "^5.15.17",
     "@mui/styled-engine-sc": "^6.0.0-alpha.18",
+    "@supabase/ssr": "^0.10.2",
+    "@supabase/supabase-js": "^2.103.3",
     "axios": "^1.7.2",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",

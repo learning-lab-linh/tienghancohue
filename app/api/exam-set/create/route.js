@@ -1,10 +1,10 @@
 import { NextResponse } from "next/server";
 import {
-  loadExamTemplateRows,
-  readJsonPayload,
-  writeJsonPayload,
-} from "@/lib/examTemplateClone";
-import { readQuizSetsMeta, writeQuizSetsMeta, getMaxDisplayOrder } from "@/lib/quizSetsMeta";
+  cloneTemplateQuestionsForSet,
+  createTopikSet,
+  getTopikSetByKey,
+  getTopikSetMaxDisplayOrder,
+} from "@/lib/topikSupabase";
 import { requireAdmin } from "@/lib/adminAuth";
 
 export const runtime = "nodejs";
@@ -31,51 +31,27 @@ export async function POST(request) {
       );
     }
 
-    const jsonPayload = readJsonPayload(testType);
-    if (jsonPayload[setKey]) {
+    const existing = await getTopikSetByKey(testType, setKey);
+    if (existing) {
       return NextResponse.json(
-        { error: `Khóa ${setKey} đã tồn tại trong file JSON` },
+        { error: `Khóa ${setKey} đã tồn tại` },
         { status: 409 }
       );
     }
 
-    const templateRows = loadExamTemplateRows(testType);
-    const questions = templateRows.map((row) => ({ ...row }));
-
-    jsonPayload[setKey] = questions;
-
-    const meta = readQuizSetsMeta();
-    const bucket = testType === "listen" ? meta.listen : meta.reading;
-    const existing = bucket[setKey];
-    const displayOrder =
-      typeof existing?.displayOrder === "number"
-        ? existing.displayOrder
-        : getMaxDisplayOrder(testType) + 1;
-
-    bucket[setKey] = {
+    const displayOrder = (await getTopikSetMaxDisplayOrder(testType)) + 1;
+    await createTopikSet({
+      testType,
+      setKey,
       label,
-      audioUrl:
-        testType === "listen" && audioUrl
-          ? String(audioUrl).trim()
-          : testType === "listen"
-            ? ""
-            : "",
+      audioUrl: testType === "listen" ? String(audioUrl || "").trim() : "",
       displayOrder,
-    };
-    meta[testType === "listen" ? "listen" : "reading"] = bucket;
-
-    writeJsonPayload(testType, jsonPayload);
-    try {
-      writeQuizSetsMeta(meta);
-    } catch (e) {
-      delete jsonPayload[setKey];
-      writeJsonPayload(testType, jsonPayload);
-      throw e;
-    }
+    });
+    const questions = await cloneTemplateQuestionsForSet({ testType, setKey });
 
     return NextResponse.json(
       {
-        message: "Đã tạo khung đề (50 câu theo mẫu Listen83 / Reading91).",
+        message: "Đã tạo khung đề (50 câu theo mẫu).",
         setKey,
         questions,
       },
