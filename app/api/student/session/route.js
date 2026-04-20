@@ -32,9 +32,12 @@ export async function POST(request) {
 
     const secret = getStudentSessionSecret();
     const { value, maxAgeSec } = await createStudentCookieValue(secret);
+    const em = claims.email?.trim().toLowerCase();
+    const enrolled = em ? await hasAnyMembershipForEmail(em) : false;
     const res = NextResponse.json({
       ok: true,
       email: claims.email || null,
+      enrolled,
     });
     res.cookies.set(STUDENT_COOKIE, value, {
       httpOnly: true,
@@ -44,8 +47,7 @@ export async function POST(request) {
       maxAge: maxAgeSec,
     });
 
-    const em = claims.email?.trim().toLowerCase();
-    if (em && (await hasAnyMembershipForEmail(em))) {
+    if (em && enrolled) {
       const classCookie = await createStudentClassCookieValue(secret, em);
       res.cookies.set(
         STUDENT_CLASS_COOKIE,

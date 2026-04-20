@@ -52,9 +52,13 @@ function StudentLoginForm() {
         return;
       }
       const next = safeNextPath(searchParams.get("from"));
-      await redirectAfterStudentSession(router, next);
+      await redirectAfterStudentSession(router, next, {
+        loggedIn: true,
+        enrolled: Boolean(payload.enrolled),
+      });
     } catch (err) {
       const code = err && typeof err === "object" && "code" in err ? err.code : "";
+      console.error("[student/login] firebase auth failed:", err);
       setError(mapFirebaseAuthError(String(code)));
     } finally {
       setLoading(false);
@@ -76,9 +80,12 @@ function StudentLoginForm() {
           disabled={loading}
           label="Đăng nhập bằng Google"
           onError={setError}
-          onAfterSession={async () => {
+          onAfterSession={async (sessionPayload) => {
             const next = safeNextPath(searchParams.get("from"));
-            await redirectAfterStudentSession(router, next);
+            await redirectAfterStudentSession(router, next, {
+              loggedIn: true,
+              enrolled: Boolean(sessionPayload?.enrolled),
+            });
           }}
         />
       </div>

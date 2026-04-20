@@ -10,7 +10,7 @@ provider.setCustomParameters({ prompt: "select_account" });
 
 /**
  * @param {{
- *   onAfterSession: () => void,
+ *   onAfterSession: (sessionPayload: { enrolled?: boolean, email?: string | null } | null) => void,
  *   onError: (message: string) => void,
  *   disabled?: boolean,
  *   label?: string,
@@ -42,10 +42,11 @@ export default function StudentGoogleSignInButton({
         onError(payload.error || "Không tạo được phiên trên máy chủ.");
         return;
       }
-      onAfterSession();
+      onAfterSession(payload && typeof payload === "object" ? payload : null);
     } catch (err) {
       const code =
         err && typeof err === "object" && "code" in err ? String(err.code) : "";
+      console.error("[student/google-signin] firebase auth failed:", err);
       onError(mapFirebaseAuthError(code));
     } finally {
       setBusy(false);
