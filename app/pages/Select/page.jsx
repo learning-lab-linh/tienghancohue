@@ -32,19 +32,6 @@ export default function Select() {
 
   const needClass = status.loggedIn && !status.enrolled;
 
-  const listenHref =
-    !status.loggedIn
-      ? "/dang-nhap?from=/pages/Listen"
-      : needClass
-        ? "/nhap-ma-lop?from=/pages/Listen"
-        : "/pages/Listen";
-  const readingHref =
-    !status.loggedIn
-      ? "/dang-nhap?from=/pages/Reading"
-      : needClass
-        ? "/nhap-ma-lop?from=/pages/Reading"
-        : "/pages/Reading";
-
   return (
     <div className="min-h-screen bg-slate-100 px-4">
       <div className="flex min-h-screen items-center justify-center">
@@ -62,32 +49,19 @@ export default function Select() {
               >
                 nhập mã lớp
               </Link>{" "}
-              trước khi làm bài.
+              để lưu kết quả vào lịch sử học viên.
             </div>
           ) : null}
 
           {!status.loading && !status.loggedIn ? (
             <p className="mb-6 text-center text-sm text-slate-600">
-              <Link
-                href="/dang-nhap?from=/pages/Select"
-                className="font-semibold text-[#b61e3b] underline-offset-2 hover:underline"
-              >
-                Đăng nhập
-              </Link>{" "}
-              hoặc{" "}
-              <Link
-                href="/dang-ky?from=/pages/Select"
-                className="font-semibold text-[#b61e3b] underline-offset-2 hover:underline"
-              >
-                đăng ký
-              </Link>{" "}
-              để làm bài và lưu kết quả.
+              Bạn có thể làm bài ngay không cần đăng nhập.
             </p>
           ) : null}
 
           <div className="flex flex-col items-center gap-3">
             <Link
-              href={status.loading ? "#" : listenHref}
+              href={status.loading ? "#" : "/pages/Listen"}
               className={`w-40 rounded-lg px-6 py-2.5 text-center text-sm font-semibold text-white transition ${
                 status.loading
                   ? "pointer-events-none bg-slate-400"
@@ -98,7 +72,7 @@ export default function Select() {
               Listen
             </Link>
             <Link
-              href={status.loading ? "#" : readingHref}
+              href={status.loading ? "#" : "/pages/Reading"}
               className={`w-40 rounded-lg border px-6 py-2.5 text-center text-sm font-semibold transition ${
                 status.loading
                   ? "pointer-events-none border-slate-200 bg-slate-100 text-slate-400"

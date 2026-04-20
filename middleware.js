@@ -11,8 +11,6 @@ import {
 } from "./lib/studentAuth";
 
 const STUDENT_PROTECTED_PREFIXES = [
-  "/pages/Listen",
-  "/pages/Reading",
   "/pages/ConnectWord",
 ];
 
@@ -69,10 +67,6 @@ export const config = {
   matcher: [
     "/admin",
     "/admin/:path*",
-    "/pages/Listen",
-    "/pages/Listen/:path*",
-    "/pages/Reading",
-    "/pages/Reading/:path*",
     "/pages/ConnectWord",
     "/pages/ConnectWord/:path*",
   ],

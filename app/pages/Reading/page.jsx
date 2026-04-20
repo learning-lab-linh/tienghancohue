@@ -1,6 +1,5 @@
 "use client";
 import React, { useState, useEffect } from "react";
-import StudentClassGate from "@/app/components/StudentClassGate";
 import SetSelection from "../../components/SetSelection";
 import { AnswerComponent } from "../../components/AnswerComponent";
 import QuestionContent from "../../components/QuestionContent";
@@ -208,10 +207,6 @@ const ReadingTest = () => {
 };
 
 export default function ReadingPage() {
-  return (
-    <StudentClassGate>
-      <ReadingTest />
-    </StudentClassGate>
-  );
+  return <ReadingTest />;
 }
 
