@@ -41,6 +41,9 @@ importers:
       firebase:
         specifier: ^10.8.0
         version: 10.14.1
+      jose:
+        specifier: ^6.2.2
+        version: 6.2.2
       json-server:
         specifier: ^1.0.0-alpha.23
         version: 1.0.0-beta.15

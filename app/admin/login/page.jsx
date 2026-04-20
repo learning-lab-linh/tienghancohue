@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { Suspense, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
@@ -44,68 +45,97 @@ function AdminLoginForm() {
   };
 
   return (
-    <div className="rounded-3xl border border-slate-200 bg-white p-8 shadow-sm">
-      <p className="mb-2 inline-flex rounded-full bg-indigo-50 px-3 py-1 text-xs font-semibold text-indigo-700">
-        Quản trị
-      </p>
-      <h1 className="text-2xl font-bold">Đăng nhập admin</h1>
-      <p className="mt-2 text-sm text-slate-600">
-        Nhập ID và mật khẩu để vào bảng điều khiển.
-      </p>
+    <div className="relative overflow-hidden rounded-3xl border border-rose-100 bg-white p-8 shadow-sm">
+      <div className="pointer-events-none absolute -right-8 -top-8 h-32 w-32 rounded-full bg-rose-200/50 blur-2xl" />
+      <div className="pointer-events-none absolute -bottom-10 -left-4 h-20 w-20 rounded-full bg-orange-200/40 blur-xl" />
 
-      <form className="mt-6 space-y-4" onSubmit={handleSubmit}>
-        <label className="block text-sm font-medium">
-          ID đăng nhập
-          <input
-            type="text"
-            name="username"
-            autoComplete="username"
-            className="mt-1 h-11 w-full rounded-xl border border-slate-300 px-3 text-black"
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
-            required
-          />
-        </label>
-        <label className="block text-sm font-medium">
-          Mật khẩu
-          <input
-            type="password"
-            name="password"
-            autoComplete="current-password"
-            className="mt-1 h-11 w-full rounded-xl border border-slate-300 px-3 text-black"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-          />
-        </label>
-        {error ? <p className="text-sm font-medium text-rose-700">{error}</p> : null}
-        <button
-          type="submit"
-          disabled={loading}
-          className="w-full rounded-xl bg-indigo-600 py-2.5 text-sm font-semibold text-white transition hover:bg-indigo-500 disabled:opacity-60"
-        >
-          {loading ? "Đang đăng nhập..." : "Đăng nhập"}
-        </button>
-      </form>
+      <div className="relative">
+        <p className="mb-2 inline-flex rounded-full border border-rose-200 bg-rose-50 px-3 py-1 text-xs font-semibold text-[#b61e3b]">
+          Quản trị
+        </p>
+        <h1 className="text-2xl font-bold text-[#b61e3b]">Đăng nhập admin</h1>
+        <p className="mt-2 text-sm text-gray-600">
+          Nhập ID và mật khẩu để vào bảng điều khiển.
+        </p>
+
+        <form className="mt-6 space-y-4" onSubmit={handleSubmit}>
+          <label className="block text-sm font-medium text-gray-800">
+            ID đăng nhập
+            <input
+              type="text"
+              name="username"
+              autoComplete="username"
+              className="mt-1.5 h-11 w-full rounded-xl border border-rose-200 bg-white px-3 text-gray-900 outline-none transition placeholder:text-gray-400 focus:border-[#b61e3b] focus:ring-2 focus:ring-[#b61e3b]/20"
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+              required
+            />
+          </label>
+          <label className="block text-sm font-medium text-gray-800">
+            Mật khẩu
+            <input
+              type="password"
+              name="password"
+              autoComplete="current-password"
+              className="mt-1.5 h-11 w-full rounded-xl border border-rose-200 bg-white px-3 text-gray-900 outline-none transition placeholder:text-gray-400 focus:border-[#b61e3b] focus:ring-2 focus:ring-[#b61e3b]/20"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+            />
+          </label>
+          {error ? (
+            <p className="text-sm font-medium text-rose-700">{error}</p>
+          ) : null}
+          <button
+            type="submit"
+            disabled={loading}
+            className="w-full rounded-full bg-[#e5441a] py-3 text-sm font-semibold text-white shadow-md transition hover:-translate-y-0.5 hover:bg-[#cf3c15] disabled:translate-y-0 disabled:opacity-60"
+          >
+            {loading ? "Đang đăng nhập..." : "Đăng nhập"}
+          </button>
+        </form>
+      </div>
     </div>
   );
 }
 
 export default function AdminLoginPage() {
   return (
-    <main className="min-h-screen bg-gradient-to-b from-slate-100 via-slate-50 to-white p-4 text-black sm:p-8">
-      <div className="mx-auto flex max-w-md flex-col gap-6 pt-12">
+    <main className="min-h-screen bg-gradient-to-b from-rose-50 via-white to-white text-gray-800">
+      <header className="border-b border-rose-100 bg-white/90 backdrop-blur">
+        <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
+          <Link href="/" className="flex items-center gap-3">
+            <Image
+              className="h-10 w-10 rounded-xl object-cover shadow-sm"
+              src="/logo.jpg"
+              alt="Tiếng Hàn Thu Huế"
+              width={40}
+              height={40}
+            />
+            <span className="text-sm font-bold tracking-wide text-[#b61e3b]">
+              Tiếng Hàn Thu Huế
+            </span>
+          </Link>
+        </div>
+      </header>
+
+      <div className="relative mx-auto flex max-w-md flex-col gap-6 px-4 pb-16 pt-10 sm:px-6">
+        <div className="pointer-events-none absolute left-1/2 top-8 h-40 w-40 -translate-x-1/2 rounded-full bg-rose-200/40 blur-3xl" />
+
         <Suspense
           fallback={
-            <div className="rounded-3xl border border-slate-200 bg-white p-8 text-sm text-slate-600">
+            <div className="rounded-3xl border border-rose-100 bg-white p-8 text-sm text-gray-600 shadow-sm">
               Đang tải...
             </div>
           }
         >
           <AdminLoginForm />
         </Suspense>
-        <p className="text-center text-sm">
-          <Link href="/pages/Select" className="text-indigo-700 underline">
+        <p className="text-center text-sm text-gray-600">
+          <Link
+            href="/pages/Select"
+            className="font-medium text-[#b61e3b] underline-offset-2 transition hover:underline"
+          >
             Quay lại trang chọn đề
           </Link>
         </p>

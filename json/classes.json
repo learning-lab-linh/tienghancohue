@@ -1,0 +1,13 @@
+[
+  {
+    "id": 1,
+    "name": "test",
+    "description": "",
+    "schedule": "22",
+    "schoolYear": "1",
+    "teacher": "hue",
+    "code": "DNE3L9",
+    "archived": false,
+    "createdAt": "2026-04-20T02:56:09.899Z"
+  }
+]

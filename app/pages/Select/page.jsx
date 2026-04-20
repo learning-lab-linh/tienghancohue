@@ -1,43 +1,138 @@
-import Link from "next/link";
+"use client";
 
-function Select() {
+import Link from "next/link";
+import { useEffect, useState } from "react";
+
+export default function Select() {
+  const [status, setStatus] = useState({ loading: true, loggedIn: false, enrolled: false });
+
+  useEffect(() => {
+    let cancelled = false;
+    (async () => {
+      try {
+        const res = await fetch("/api/student/class/status");
+        const data = await res.json().catch(() => ({}));
+        if (!cancelled) {
+          setStatus({
+            loading: false,
+            loggedIn: Boolean(data.loggedIn),
+            enrolled: Boolean(data.enrolled),
+          });
+        }
+      } catch {
+        if (!cancelled) {
+          setStatus({ loading: false, loggedIn: false, enrolled: false });
+        }
+      }
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  const needClass = status.loggedIn && !status.enrolled;
+
+  const listenHref =
+    !status.loggedIn
+      ? "/dang-nhap?from=/pages/Listen"
+      : needClass
+        ? "/nhap-ma-lop?from=/pages/Listen"
+        : "/pages/Listen";
+  const readingHref =
+    !status.loggedIn
+      ? "/dang-nhap?from=/pages/Reading"
+      : needClass
+        ? "/nhap-ma-lop?from=/pages/Reading"
+        : "/pages/Reading";
+
   return (
     <div className="min-h-screen bg-slate-100 px-4">
       <div className="flex min-h-screen items-center justify-center">
         <div className="w-full max-w-md rounded-2xl border border-slate-200 bg-white p-10 shadow-sm">
-          <h1 className="mb-8 text-center text-2xl font-bold text-slate-800">
+          <h1 className="mb-4 text-center text-2xl font-bold text-slate-800">
             Hãy lựa chọn phần bạn muốn ôn
           </h1>
+
+          {!status.loading && needClass ? (
+            <div className="mb-6 rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-950">
+              Bạn cần{" "}
+              <Link
+                href="/nhap-ma-lop?from=/pages/Select"
+                className="font-semibold underline underline-offset-2"
+              >
+                nhập mã lớp
+              </Link>{" "}
+              trước khi làm bài.
+            </div>
+          ) : null}
+
+          {!status.loading && !status.loggedIn ? (
+            <p className="mb-6 text-center text-sm text-slate-600">
+              <Link
+                href="/dang-nhap?from=/pages/Select"
+                className="font-semibold text-[#b61e3b] underline-offset-2 hover:underline"
+              >
+                Đăng nhập
+              </Link>{" "}
+              hoặc{" "}
+              <Link
+                href="/dang-ky?from=/pages/Select"
+                className="font-semibold text-[#b61e3b] underline-offset-2 hover:underline"
+              >
+                đăng ký
+              </Link>{" "}
+              để làm bài và lưu kết quả.
+            </p>
+          ) : null}
+
           <div className="flex flex-col items-center gap-3">
-            <Link href={"/pages/Listen"}>
-              <button
-                type="button"
-                className="w-40 rounded-lg bg-slate-800 px-6 py-2.5 text-white transition hover:bg-slate-700"
-              >
-                Listen
-              </button>
+            <Link
+              href={status.loading ? "#" : listenHref}
+              className={`w-40 rounded-lg px-6 py-2.5 text-center text-sm font-semibold text-white transition ${
+                status.loading
+                  ? "pointer-events-none bg-slate-400"
+                  : "bg-slate-800 hover:bg-slate-700"
+              }`}
+              aria-busy={status.loading}
+            >
+              Listen
             </Link>
-            <Link href={"/pages/Reading"}>
-              <button
-                type="button"
-                className="w-40 rounded-lg border border-slate-300 bg-white px-6 py-2.5 text-slate-700 transition hover:bg-slate-50"
-              >
-                Reading
-              </button>
+            <Link
+              href={status.loading ? "#" : readingHref}
+              className={`w-40 rounded-lg border px-6 py-2.5 text-center text-sm font-semibold transition ${
+                status.loading
+                  ? "pointer-events-none border-slate-200 bg-slate-100 text-slate-400"
+                  : "border-slate-300 bg-white text-slate-700 hover:bg-slate-50"
+              }`}
+              aria-busy={status.loading}
+            >
+              Reading
             </Link>
-            <Link href={"/admin"}>
-              <button
-                type="button"
-                className="w-40 rounded-lg bg-emerald-600 px-6 py-2.5 text-white transition hover:bg-emerald-500"
+           
+            {status.loggedIn && status.enrolled ? (
+              <Link
+                href="/lich-su-lam-bai"
+                className="inline-block w-40 rounded-lg border border-indigo-200 bg-indigo-50 px-6 py-2.5 text-center text-sm font-semibold text-indigo-900 transition hover:bg-indigo-100"
               >
-                Admin
-              </button>
-            </Link>
+                Lịch sử làm bài
+              </Link>
+            ) : null}
           </div>
+
+          {needClass ? (
+            <p className="mt-6 text-center text-xs text-slate-500">
+              Hoặc mở trực tiếp{" "}
+              <Link
+                href="/nhap-ma-lop?from=/pages/Select"
+                className="font-medium text-teal-700 underline-offset-2 hover:underline"
+              >
+                nhập mã lớp
+              </Link>
+              .
+            </p>
+          ) : null}
         </div>
       </div>
     </div>
   );
 }
-
-export default Select;

@@ -7,11 +7,15 @@ import {
   getListenAudioFallbackBySetKey,
 } from "@/lib/quizSetsMeta";
 import { requireAdmin } from "@/lib/adminAuth";
+import { requireAdminOrStudent } from "@/lib/quizAccess";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 
 export async function GET(request) {
+  const denied = await requireAdminOrStudent(request);
+  if (denied) return denied;
+
   const { searchParams } = new URL(request.url);
   const testType = searchParams.get("testType");
 

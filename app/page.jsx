@@ -1,5 +1,6 @@
 import Link from "next/link";
 import Image from "next/image";
+import StudentHeaderAuth from "./components/StudentHeaderAuth";
 import { IoAccessibilityOutline } from "react-icons/io5";
 import { CgPlayListCheck } from "react-icons/cg";
 import { GoBook } from "react-icons/go";
@@ -77,13 +78,8 @@ export default function Home() {
             </Link>
           </nav>
 
-          <div className="hiddenC items-center gap-3 lg:flex">
-            <button className="rounded-full border border-[#b61e3b] px-4 py-1.5 text-sm font-semibold text-[#b61e3b] transition hover:bg-rose-50">
-              Đăng ký
-            </button>
-            <button className="rounded-full bg-[#b61e3b] px-4 py-1.5 text-sm font-semibold text-white shadow-sm transition hover:bg-[#9d1832]">
-              Đăng nhập
-            </button>
+          <div className="flex items-center gap-2 lg:gap-3">
+            <StudentHeaderAuth />
           </div>
         </div>
       </header>

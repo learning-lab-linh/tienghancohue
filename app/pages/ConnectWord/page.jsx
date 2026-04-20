@@ -1,6 +1,7 @@
 'use client'
 /// src/Game.js
 import React, { useState, useEffect } from 'react';
+import StudentClassGate from "@/app/components/StudentClassGate";
 import vocabulary from '../../components/vocabulary'; // Import danh sách từ vựng
 
 const Game = () => {
@@ -111,4 +112,10 @@ const Game = () => {
   );
 };
 
-export default Game;
+export default function ConnectWordPage() {
+  return (
+    <StudentClassGate>
+      <Game />
+    </StudentClassGate>
+  );
+}
