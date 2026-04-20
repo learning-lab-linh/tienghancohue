@@ -37,23 +37,34 @@ export async function POST(request) {
   const denied = await requireAdmin(request);
   if (denied) return denied;
 
-  const body = await request.json().catch(() => ({}));
-  const name = String(body.name ?? "").trim();
-  if (!name || name.length > 200) {
+  try {
+    const body = await request.json().catch(() => ({}));
+    const name = String(body.name ?? "").trim();
+    if (!name || name.length > 200) {
+      return NextResponse.json(
+        { error: "Tên lớp bắt buộc, tối đa 200 ký tự." },
+        { status: 400 }
+      );
+    }
+
+    const description = String(body.description ?? "").trim().slice(0, 2000);
+    const schedule = String(body.schedule ?? "").trim().slice(0, 500);
+    const schoolYear = String(body.schoolYear ?? "").trim().slice(0, 80);
+    const teacher = String(body.teacher ?? "").trim().slice(0, 120);
+
+    const row = createClass({ name, description, schedule, schoolYear, teacher });
     return NextResponse.json(
-      { error: "Tên lớp bắt buộc, tối đa 200 ký tự." },
-      { status: 400 }
+      { data: { ...row, studentCount: 0 } },
+      { status: 201 }
+    );
+  } catch (error) {
+    console.error("POST /api/admin/classes failed", error);
+    return NextResponse.json(
+      {
+        error:
+          "Không thể tạo lớp trên môi trường hiện tại. Nếu đang chạy trên Vercel, hãy dùng database/KV thay vì ghi file JSON.",
+      },
+      { status: 500 }
     );
   }
-
-  const description = String(body.description ?? "").trim().slice(0, 2000);
-  const schedule = String(body.schedule ?? "").trim().slice(0, 500);
-  const schoolYear = String(body.schoolYear ?? "").trim().slice(0, 80);
-  const teacher = String(body.teacher ?? "").trim().slice(0, 120);
-
-  const row = createClass({ name, description, schedule, schoolYear, teacher });
-  return NextResponse.json(
-    { data: { ...row, studentCount: 0 } },
-    { status: 201 }
-  );
 }
