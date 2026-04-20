@@ -13,16 +13,24 @@ export async function GET(request) {
   const denied = await requireAdmin(request);
   if (denied) return denied;
 
-  const { searchParams } = new URL(request.url);
-  const includeArchived = searchParams.get("includeArchived") === "1";
-  const data = listClasses({ includeArchived });
-  const counts = countMembersByClassIds(data.map((c) => c.id));
-  const enriched = data.map((c) => ({
-    ...c,
-    studentCount: counts.get(c.id) ?? 0,
-  }));
-  const totalStudentCount = countDistinctMemberEmails();
-  return NextResponse.json({ data: enriched, totalStudentCount });
+  try {
+    const { searchParams } = new URL(request.url);
+    const includeArchived = searchParams.get("includeArchived") === "1";
+    const data = listClasses({ includeArchived });
+    const counts = countMembersByClassIds(data.map((c) => c.id));
+    const enriched = data.map((c) => ({
+      ...c,
+      studentCount: counts.get(c.id) ?? 0,
+    }));
+    const totalStudentCount = countDistinctMemberEmails();
+    return NextResponse.json({ data: enriched, totalStudentCount });
+  } catch (error) {
+    console.error("GET /api/admin/classes failed", error);
+    return NextResponse.json(
+      { error: "Không thể tải danh sách lớp. Vui lòng thử lại." },
+      { status: 500 }
+    );
+  }
 }
 
 export async function POST(request) {
