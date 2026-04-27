@@ -22,6 +22,7 @@ const ListenTest = () => {
   const [timeLeft, setTimeLeft] = useState(TEST_DURATION_SECONDS);
   const [audio, setAudio] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [loadError, setLoadError] = useState("");
   const selectedSetNumber =
     availableSets.findIndex((item) => item.setKey === selectedSet) + 1;
 
@@ -42,6 +43,10 @@ const ListenTest = () => {
       } catch (error) {
         console.error("Không thể tải danh sách bộ đề nghe:", error);
         setAvailableSets([]);
+        NotificationManager.warning(
+          "Mạng đang yếu hoặc mất kết nối. Không tải được danh sách bộ đề.",
+          "Lỗi kết nối"
+        );
       }
     };
     fetchSets();
@@ -51,16 +56,32 @@ const ListenTest = () => {
     const fetchQuestions = async () => {
       if (!selectedSet) return;
       setIsLoading(true);
+      setLoadError("");
       try {
         const response = await fetch(
           `/api/questions?testType=listen&setKey=${selectedSet}`
         );
+        if (!response.ok) {
+          throw new Error("Không tải được dữ liệu đề thi.");
+        }
         const payload = await response.json();
         setQuestionsSet(payload.data || []);
         setAudio(payload.audio || "");
+        if (!payload.audio) {
+          NotificationManager.warning(
+            "De nay chua co audio hoac audio tam thoi khong kha dung.",
+            "Thieu audio"
+          );
+        }
       } catch (error) {
         console.error("Không thể tải bộ đề nghe:", error);
         setQuestionsSet([]);
+        setAudio("");
+        setLoadError("Không tải được đề thi. Vui lòng kiểm tra mạng rồi thử lại.");
+        NotificationManager.error(
+          "Không tải được đề thi. Vui lòng kiểm tra kết nối mạng.",
+          "Lỗi tải đề"
+        );
       } finally {
         setIsLoading(false);
       }
@@ -157,6 +178,11 @@ const ListenTest = () => {
        <AudioPlayer audio={audio} />
       )}
       {isLoading && <p className="text-sm text-slate-600">Đang tải đề thi...</p>}
+      {loadError && (
+        <p className="rounded-lg border border-rose-200 bg-rose-50 px-3 py-2 text-sm text-rose-700">
+          {loadError}
+        </p>
+      )}
       <div className="w-full space-y-4">
         {questionsSet.map((question) => {
           const questionNumber = question.id;

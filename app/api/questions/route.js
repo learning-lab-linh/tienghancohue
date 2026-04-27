@@ -5,6 +5,7 @@ import {
   upsertTopikQuestion,
 } from "@/lib/topikSupabase";
 import { getSetKey } from "@/lib/quizSetUiMaps";
+import { getListenAudioFallbackBySetKey } from "@/lib/quizSetsMeta";
 import { requireAdmin } from "@/lib/adminAuth";
 
 export const runtime = "nodejs";
@@ -29,11 +30,15 @@ export async function GET(request) {
       listTopikQuestionsBySet(testType, setKey),
       getTopikSetByKey(testType, setKey),
     ]);
+    const audioUrl =
+      testType === "listen"
+        ? setMeta?.audioUrl || getListenAudioFallbackBySetKey(setKey)
+        : "";
 
     return NextResponse.json({
       data: questions,
       setKey,
-      audio: testType === "listen" ? setMeta?.audioUrl || "" : "",
+      audio: audioUrl,
     });
   } catch (error) {
     console.error("GET /api/questions failed", error);
