@@ -23,6 +23,7 @@ const ListenTest = () => {
   const [audio, setAudio] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [loadError, setLoadError] = useState("");
+  const [audioWarning, setAudioWarning] = useState("");
   const selectedSetNumber =
     availableSets.findIndex((item) => item.setKey === selectedSet) + 1;
 
@@ -57,6 +58,7 @@ const ListenTest = () => {
       if (!selectedSet) return;
       setIsLoading(true);
       setLoadError("");
+      setAudioWarning("");
       try {
         const response = await fetch(
           `/api/questions?testType=listen&setKey=${selectedSet}`
@@ -68,9 +70,13 @@ const ListenTest = () => {
         setQuestionsSet(payload.data || []);
         setAudio(payload.audio || "");
         if (!payload.audio) {
+          const warningText =
+            "Đề này hiện chưa có audio hoặc audio đang tạm thời không khả dụng.";
+          setAudioWarning(warningText);
+          console.warn("[Listen] Missing audio for set:", selectedSet, payload);
           NotificationManager.warning(
-            "De nay chua co audio hoac audio tam thoi khong kha dung.",
-            "Thieu audio"
+            warningText,
+            "Thiếu audio"
           );
         }
       } catch (error) {
@@ -181,6 +187,11 @@ const ListenTest = () => {
       {loadError && (
         <p className="rounded-lg border border-rose-200 bg-rose-50 px-3 py-2 text-sm text-rose-700">
           {loadError}
+        </p>
+      )}
+      {audioWarning && (
+        <p className="rounded-lg border border-amber-200 bg-amber-50 px-3 py-2 text-sm text-amber-800">
+          {audioWarning}
         </p>
       )}
       <div className="w-full space-y-4">

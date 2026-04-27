@@ -34,6 +34,12 @@ export async function GET(request) {
       testType === "listen"
         ? setMeta?.audioUrl || getListenAudioFallbackBySetKey(setKey)
         : "";
+    if (testType === "listen" && !audioUrl) {
+      console.warn("[GET /api/questions] Missing listen audio", {
+        setKey,
+        fromDb: setMeta?.audioUrl || "",
+      });
+    }
 
     return NextResponse.json({
       data: questions,
