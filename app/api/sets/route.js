@@ -1,14 +1,23 @@
 import { NextResponse } from "next/server";
 import {
   createTopikSet,
+  deleteTopikSetWithQuestions,
   getTopikSetMaxDisplayOrder,
+  listTopikQuestionsBySet,
   listTopikQuestionSetKeysByType,
   listTopikSetsByType,
 } from "@/lib/topikSupabase";
+import { deleteFirebaseFilesByUrls } from "@/lib/firebaseStorageServer";
 import { requireAdmin } from "@/lib/adminAuth";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
+
+function extractUrlsFromText(text) {
+  if (!text || typeof text !== "string") return [];
+  const matches = text.match(/https?:\/\/[^\s"'<>]+/g);
+  return matches || [];
+}
 
 export async function GET(request) {
   try {
@@ -94,6 +103,60 @@ export async function POST(request) {
     console.error("POST /api/sets failed", error);
     return NextResponse.json(
       { error: "Không tạo được bộ đề." },
+      { status: 500 }
+    );
+  }
+}
+
+export async function DELETE(request) {
+  const denied = await requireAdmin(request);
+  if (denied) return denied;
+  try {
+    const { searchParams } = new URL(request.url);
+    const testType = searchParams.get("testType");
+    const setKey = searchParams.get("setKey");
+
+    if (!testType || !["listen", "reading"].includes(testType)) {
+      return NextResponse.json(
+        { error: "testType không hợp lệ (listen | reading)" },
+        { status: 400 }
+      );
+    }
+    if (!setKey || !String(setKey).trim()) {
+      return NextResponse.json(
+        { error: "setKey là bắt buộc" },
+        { status: 400 }
+      );
+    }
+
+    const questions = await listTopikQuestionsBySet(testType, setKey);
+    const candidateUrls = questions.flatMap((q) => [
+      ...extractUrlsFromText(q.content),
+      ...(Array.isArray(q.options)
+        ? q.options.flatMap((option) => extractUrlsFromText(option))
+        : []),
+    ]);
+    const firebaseDeleteResult = await deleteFirebaseFilesByUrls(candidateUrls);
+    if (firebaseDeleteResult.failed.length) {
+      console.warn("DELETE /api/sets firebase cleanup partial failure", {
+        testType,
+        setKey,
+        failed: firebaseDeleteResult.failed,
+      });
+    }
+
+    await deleteTopikSetWithQuestions({ testType, setKey });
+    return NextResponse.json({
+      message: "Đã xóa bộ đề thành công.",
+      firebaseCleanup: {
+        deletedCount: firebaseDeleteResult.deleted.length,
+        failedCount: firebaseDeleteResult.failed.length,
+      },
+    });
+  } catch (error) {
+    console.error("DELETE /api/sets failed", error);
+    return NextResponse.json(
+      { error: "Không xóa được bộ đề." },
       { status: 500 }
     );
   }
