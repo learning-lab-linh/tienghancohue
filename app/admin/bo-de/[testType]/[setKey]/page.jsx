@@ -69,6 +69,9 @@ export default function AdminBoDeSetDetailPage() {
   const [uploadMessage, setUploadMessage] = useState("");
   const [deletingSet, setDeletingSet] = useState(false);
   const [deleteMessage, setDeleteMessage] = useState("");
+  const [audioDraft, setAudioDraft] = useState("");
+  const [savingAudio, setSavingAudio] = useState(false);
+  const [audioMessage, setAudioMessage] = useState("");
   const [editForm, setEditForm] = useState({
     type: "",
     content: "",
@@ -95,9 +98,13 @@ export default function AdminBoDeSetDetailPage() {
             label: row?.label || setKey,
             audioUrl: row?.audioUrl || "",
           });
+          setAudioDraft(row?.audioUrl || "");
         }
       } catch {
-        if (!cancelled) setSetMeta({ label: setKey, audioUrl: "" });
+        if (!cancelled) {
+          setSetMeta({ label: setKey, audioUrl: "" });
+          setAudioDraft("");
+        }
       }
     })();
     return () => {
@@ -259,6 +266,33 @@ export default function AdminBoDeSetDetailPage() {
       setDeleteMessage(error.message || "Không thể xóa bộ đề.");
     } finally {
       setDeletingSet(false);
+    }
+  };
+
+  const saveAudioUrl = async () => {
+    if (!isListen || !testType || !setKey || savingAudio) return;
+    setSavingAudio(true);
+    setAudioMessage("");
+    try {
+      const response = await fetch("/api/sets", {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          testType,
+          setKey,
+          audioUrl: audioDraft.trim(),
+        }),
+      });
+      const payload = await response.json().catch(() => ({}));
+      if (!response.ok) {
+        throw new Error(payload.error || "Lưu link audio thất bại.");
+      }
+      setSetMeta((prev) => ({ ...prev, audioUrl: audioDraft.trim() }));
+      setAudioMessage("Đã cập nhật link audio.");
+    } catch (error) {
+      setAudioMessage(error.message || "Không thể lưu link audio.");
+    } finally {
+      setSavingAudio(false);
     }
   };
 
@@ -429,6 +463,61 @@ export default function AdminBoDeSetDetailPage() {
             </div>
 
             <div className="space-y-5">
+              {isListen ? (
+                <Panel title="Audio đề nghe" icon={Headphones}>
+                  <div className="space-y-3">
+                    <label className="block">
+                      <span className="mb-1.5 block text-xs font-medium text-zinc-500">
+                        Link audio (mp3)
+                      </span>
+                      <input
+                        className="h-11 w-full rounded-xl border border-zinc-300 bg-white px-3 text-sm text-black placeholder:text-zinc-400 focus:border-zinc-900 focus:outline-none focus:ring-2 focus:ring-zinc-900/15"
+                        placeholder="https://firebasestorage.googleapis.com/..."
+                        value={audioDraft}
+                        onChange={(e) => setAudioDraft(e.target.value)}
+                      />
+                    </label>
+                    <div className="flex flex-wrap items-center gap-2">
+                      <button
+                        type="button"
+                        onClick={saveAudioUrl}
+                        disabled={savingAudio}
+                        className="inline-flex items-center gap-2 rounded-xl border border-zinc-900 bg-zinc-900 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-black disabled:cursor-not-allowed disabled:opacity-50"
+                      >
+                        {savingAudio ? (
+                          <Loader2 className="h-4 w-4 animate-spin" aria-hidden />
+                        ) : (
+                          <Save className="h-4 w-4" aria-hidden />
+                        )}
+                        {savingAudio ? "Đang lưu audio…" : "Lưu link audio"}
+                      </button>
+                      {setMeta.audioUrl ? (
+                        <a
+                          href={setMeta.audioUrl}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="inline-flex items-center gap-1.5 text-sm font-medium text-zinc-700 underline decoration-zinc-300 underline-offset-4 hover:text-black hover:decoration-zinc-600"
+                        >
+                          Mở audio hiện tại
+                          <ExternalLink className="h-4 w-4" aria-hidden />
+                        </a>
+                      ) : null}
+                    </div>
+                    {audioMessage ? (
+                      <p
+                        className={`text-sm ${
+                          audioMessage.includes("Đã")
+                            ? "text-zinc-600"
+                            : "font-medium text-black"
+                        }`}
+                      >
+                        {audioMessage}
+                      </p>
+                    ) : null}
+                  </div>
+                </Panel>
+              ) : null}
+
               {editForm.type.trim() ? (
                 <Panel title="Nhóm / mô tả loại câu" icon={Type}>
                   <textarea

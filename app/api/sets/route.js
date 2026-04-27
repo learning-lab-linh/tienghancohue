@@ -6,6 +6,7 @@ import {
   listTopikQuestionsBySet,
   listTopikQuestionSetKeysByType,
   listTopikSetsByType,
+  updateTopikSetAudio,
 } from "@/lib/topikSupabase";
 import { deleteFirebaseFilesByUrls } from "@/lib/firebaseStorageServer";
 import { requireAdmin } from "@/lib/adminAuth";
@@ -157,6 +158,39 @@ export async function DELETE(request) {
     console.error("DELETE /api/sets failed", error);
     return NextResponse.json(
       { error: "Không xóa được bộ đề." },
+      { status: 500 }
+    );
+  }
+}
+
+export async function PATCH(request) {
+  const denied = await requireAdmin(request);
+  if (denied) return denied;
+  try {
+    const body = await request.json();
+    const { testType, setKey, audioUrl } = body || {};
+
+    if (testType !== "listen") {
+      return NextResponse.json(
+        { error: "Chỉ hỗ trợ cập nhật audio cho bộ đề nghe." },
+        { status: 400 }
+      );
+    }
+    if (!setKey || !String(setKey).trim()) {
+      return NextResponse.json({ error: "setKey là bắt buộc" }, { status: 400 });
+    }
+
+    await updateTopikSetAudio({
+      testType,
+      setKey: String(setKey).trim(),
+      audioUrl: String(audioUrl || "").trim(),
+    });
+
+    return NextResponse.json({ message: "Đã cập nhật link audio." });
+  } catch (error) {
+    console.error("PATCH /api/sets failed", error);
+    return NextResponse.json(
+      { error: "Không cập nhật được link audio." },
       { status: 500 }
     );
   }
