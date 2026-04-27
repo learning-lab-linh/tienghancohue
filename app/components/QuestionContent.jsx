@@ -11,11 +11,11 @@ const QuestionContent = ({ question, questionNumber }) => {
         <h1 className="mb-3 text-base font-semibold text-slate-700 sm:text-lg">
           {question.type}
         </h1>
-        <div className="flex justify-center">
+        <div className="w-full">
           <img
             src={question.content}
             alt={`Câu hỏi ${questionNumber}`}
-            className="h-auto max-w-full cursor-zoom-in rounded-lg "
+            className="h-auto w-full cursor-zoom-in rounded-lg"
             onClick={() => setIsZoomed(true)}
           />
         </div>

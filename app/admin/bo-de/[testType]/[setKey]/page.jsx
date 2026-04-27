@@ -3,7 +3,7 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { useParams, useRouter, notFound } from "next/navigation";
+import { useParams, notFound } from "next/navigation";
 import {
   ArrowLeft,
   BookOpen,
@@ -16,7 +16,6 @@ import {
   LayoutList, 
   Loader2,
   Save,
-  Trash2,
   Type,
 } from "lucide-react";
 
@@ -52,7 +51,6 @@ function Panel({ title, icon: Icon, children, className = "" }) {
 
 export default function AdminBoDeSetDetailPage() {
   const params = useParams();
-  const router = useRouter();
   const rawType = String(params?.testType ?? "");
   const rawKey = String(params?.setKey ?? "");
   const testType = ALLOWED.includes(rawType) ? rawType : null;
@@ -67,8 +65,6 @@ export default function AdminBoDeSetDetailPage() {
   const [errorQuestions, setErrorQuestions] = useState("");
   const [uploadingImage, setUploadingImage] = useState(false);
   const [uploadMessage, setUploadMessage] = useState("");
-  const [deletingSet, setDeletingSet] = useState(false);
-  const [deleteMessage, setDeleteMessage] = useState("");
   const [audioDraft, setAudioDraft] = useState("");
   const [savingAudio, setSavingAudio] = useState(false);
   const [audioMessage, setAudioMessage] = useState("");
@@ -237,37 +233,6 @@ export default function AdminBoDeSetDetailPage() {
   const isListen = testType === "listen";
 
   const saveOk = Boolean(saveMessage && saveMessage.includes("thành công"));
-
-  const handleDeleteSet = async () => {
-    if (!testType || !setKey || deletingSet) return;
-    const confirmed = window.confirm(
-      `Bạn có chắc muốn xóa bộ đề ${setKey}?\nHành động này sẽ xóa toàn bộ câu hỏi của bộ đề và không thể hoàn tác.`
-    );
-    if (!confirmed) return;
-
-    setDeletingSet(true);
-    setDeleteMessage("");
-    try {
-      const response = await fetch(
-        `/api/sets?testType=${testType}&setKey=${encodeURIComponent(setKey)}`,
-        { method: "DELETE" }
-      );
-      const payload = await response.json().catch(() => ({}));
-      if (!response.ok) throw new Error(payload.error || "Xóa bộ đề thất bại.");
-      const deletedCount = Number(payload?.firebaseCleanup?.deletedCount || 0);
-      const failedCount = Number(payload?.firebaseCleanup?.failedCount || 0);
-      setDeleteMessage(
-        `Đã xóa bộ đề. Đã dọn ${deletedCount} file ảnh Firebase${
-          failedCount > 0 ? `, lỗi ${failedCount} file` : ""
-        }. Đang quay về danh sách...`
-      );
-      router.push("/admin/bo-de");
-    } catch (error) {
-      setDeleteMessage(error.message || "Không thể xóa bộ đề.");
-    } finally {
-      setDeletingSet(false);
-    }
-  };
 
   const saveAudioUrl = async () => {
     if (!isListen || !testType || !setKey || savingAudio) return;
@@ -627,9 +592,7 @@ export default function AdminBoDeSetDetailPage() {
 
             <div className="sticky bottom-4 z-10 flex flex-col gap-3 rounded-2xl border border-zinc-300 bg-white/95 p-4 shadow-lg shadow-black/10 backdrop-blur-md sm:flex-row sm:items-center sm:justify-between">
               <div className="min-w-0 text-sm">
-                {deleteMessage ? (
-                  <p className="font-medium text-black">{deleteMessage}</p>
-                ) : saveMessage ? (
+                {saveMessage ? (
                   <p
                     className={
                       saveOk ? "font-medium text-zinc-600" : "font-medium text-black"
@@ -646,7 +609,7 @@ export default function AdminBoDeSetDetailPage() {
               <button
                 type="button"
                 onClick={saveQuestion}
-                disabled={savingQuestion || deletingSet || !selectedQuestionId}
+                disabled={savingQuestion || !selectedQuestionId}
                 className="inline-flex items-center justify-center gap-2 rounded-xl border border-zinc-900 bg-zinc-900 px-6 py-3 text-sm font-semibold text-white shadow-md transition hover:bg-black disabled:cursor-not-allowed disabled:opacity-50"
               >
                 {savingQuestion ? (
@@ -655,19 +618,6 @@ export default function AdminBoDeSetDetailPage() {
                   <Save className="h-5 w-5" aria-hidden />
                 )}
                 {savingQuestion ? "Đang lưu…" : "Lưu câu hỏi"}
-              </button>
-              <button
-                type="button"
-                onClick={handleDeleteSet}
-                disabled={deletingSet || savingQuestion}
-                className="inline-flex items-center justify-center gap-2 rounded-xl border border-rose-600 bg-rose-600 px-5 py-3 text-sm font-semibold text-white shadow-md transition hover:bg-rose-700 disabled:cursor-not-allowed disabled:opacity-50"
-              >
-                {deletingSet ? (
-                  <Loader2 className="h-5 w-5 animate-spin" aria-hidden />
-                ) : (
-                  <Trash2 className="h-5 w-5" aria-hidden />
-                )}
-                {deletingSet ? "Đang xóa…" : "Xóa bộ đề"}
               </button>
             </div>
           </div>

@@ -5,8 +5,29 @@ import { AnswerComponent } from "../../components/AnswerComponent";
 import QuestionContent from "../../components/QuestionContent";
 import TestingLayout from "../../layouts/TestingLayout";
 import '../../styles/style.css'
-import 'react-notifications/lib/notifications.css';
-import {NotificationContainer, NotificationManager} from 'react-notifications';
+
+function runSubmitConfetti() {
+  import("canvas-confetti")
+    .then(({ default: confetti }) => {
+      confetti({
+        particleCount: 120,
+        spread: 75,
+        startVelocity: 40,
+        origin: { y: 0.65 },
+      });
+      setTimeout(() => {
+        confetti({
+          particleCount: 80,
+          spread: 95,
+          startVelocity: 32,
+          origin: { y: 0.7 },
+        });
+      }, 180);
+    })
+    .catch((error) => {
+      console.warn("Không chạy được hiệu ứng confetti:", error);
+    });
+}
 
 const ReadingTest = () => {
   const TEST_DURATION_SECONDS = 70 * 60;
@@ -19,6 +40,7 @@ const ReadingTest = () => {
   const [questions, setQuestions] = useState([]);
   const [showTracking, setShowTracking] = useState(true);
   const [score, setScore] = useState();
+  const [showScoreOverlay, setShowScoreOverlay] = useState(false);
   const [timeLeft, setTimeLeft] = useState(TEST_DURATION_SECONDS);
   const [isLoading, setIsLoading] = useState(false);
   const selectedSetNumber =
@@ -108,6 +130,7 @@ const ReadingTest = () => {
     const scores = calculateScore();
 
     setScore(scores);
+    setShowScoreOverlay(true);
     try {
       await fetch("/api/results", {
         method: "POST",
@@ -125,7 +148,7 @@ const ReadingTest = () => {
       console.error("Không thể lưu kết quả bài đọc:", error);
     }
 
-    NotificationManager.success(`Số điểm của bạn là ${scores}`, "Kết quả");
+    runSubmitConfetti();
   };
 
   const handleJumpToQuestion = (questionNumber) => {
@@ -153,7 +176,20 @@ const ReadingTest = () => {
     answeredQuestions={answeredQuestions}
     selectedSet={selectedSet}
   >
-    <NotificationContainer />
+      {showScoreOverlay ? (
+        <div
+          className="fixed inset-0 z-[70] flex items-center justify-center bg-black/10 px-4"
+          onClick={() => setShowScoreOverlay(false)}
+        >
+          <div
+            className="rounded-2xl border border-emerald-200 bg-white/95 px-8 py-6 text-center shadow-2xl backdrop-blur-sm"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <p className="text-sm font-medium text-slate-500">Kết quả của bạn</p>
+            <p className="mt-1 text-3xl font-bold text-emerald-600">{score} điểm</p>
+          </div>
+        </div>
+      ) : null}
       {isLoading && <p className="text-sm text-slate-600">Đang tải đề thi...</p>}
       <div className="w-full space-y-4">
         {questionsSet.map((question) => {
@@ -166,11 +202,11 @@ const ReadingTest = () => {
             <div
               key={questionNumber}
               id={`question${questionNumber}`}
-              className="scroll-mt-28"
+              className="scroll-mt-28 mb-5 last:mb-0"
             >
               <QuestionContent question={question} questionNumber={questionNumber} />
 
-              <div className="my-4 grid grid-cols-2 gap-2">
+              <div className="my-1 grid grid-cols-4 gap-px sm:grid-cols-2">
                 {question.options.map((option, index) => (
                   <AnswerComponent
                     key={index}

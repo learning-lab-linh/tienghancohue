@@ -2,7 +2,7 @@
 
 import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
-import { BookOpen, ChevronRight, Headphones, PenLine } from "lucide-react";
+import { BookOpen, ChevronRight, Headphones, PenLine, Trash2 } from "lucide-react";
 
 const DEFAULT_SETS = {
   listen: [
@@ -28,15 +28,12 @@ function fallbackSets(testType) {
   }));
 }
 
-function SetGridCard({ testType, setRow, count }) {
+function SetGridCard({ testType, setRow, count, deleting, onDelete }) {
   const href = `/admin/bo-de/${testType}/${encodeURIComponent(setRow.setKey)}`;
   const isListen = testType === "listen";
 
   return (
-    <Link
-      href={href}
-      className="group flex flex-col rounded-2xl border border-rose-100 bg-white p-5 shadow-sm transition hover:border-[#b61e3b]/35 hover:shadow-md"
-    >
+    <article className="group rounded-2xl border border-rose-100 bg-white p-5 shadow-sm transition hover:border-[#b61e3b]/35 hover:shadow-md">
       <div className="flex items-start justify-between gap-2">
         <span
           className={`inline-flex items-center gap-1 rounded-full px-2.5 py-0.5 text-xs font-semibold ${
@@ -57,7 +54,15 @@ function SetGridCard({ testType, setRow, count }) {
             </>
           )}
         </span>
-        <ChevronRight className="h-5 w-5 shrink-0 text-gray-300 transition group-hover:translate-x-0.5 group-hover:text-[#b61e3b]" />
+        <button
+          type="button"
+          onClick={() => onDelete(testType, setRow.setKey)}
+          disabled={deleting}
+          title="Xóa bộ đề"
+          className="inline-flex h-8 w-8 items-center justify-center rounded-full border border-rose-200 text-rose-600 transition hover:bg-rose-50 disabled:cursor-not-allowed disabled:opacity-50"
+        >
+          <Trash2 className="h-4 w-4" aria-hidden />
+        </button>
       </div>
       <h3 className="mt-3 line-clamp-2 text-lg font-semibold text-gray-900 group-hover:text-[#b61e3b]">
         {setRow.label || setRow.setKey}
@@ -67,11 +72,15 @@ function SetGridCard({ testType, setRow, count }) {
         <span className="text-gray-600">
           {count == null ? "—" : `${count} câu`}
         </span>
-        <span className="font-medium text-[#b61e3b] group-hover:text-[#9a1932]">
+        <Link
+          href={href}
+          className="inline-flex items-center gap-1 font-medium text-[#b61e3b] hover:text-[#9a1932]"
+        >
           Chỉnh sửa
-        </span>
+          <ChevronRight className="h-4 w-4" aria-hidden />
+        </Link>
       </div>
-    </Link>
+    </article>
   );
 }
 
@@ -82,6 +91,8 @@ export default function AdminBoDeGridPage() {
   const [errReading, setErrReading] = useState("");
   const [loading, setLoading] = useState(true);
   const [counts, setCounts] = useState({});
+  const [deletingKey, setDeletingKey] = useState("");
+  const [actionMessage, setActionMessage] = useState("");
 
   useEffect(() => {
     let cancelled = false;
@@ -166,6 +177,43 @@ export default function AdminBoDeGridPage() {
     };
   }, [allEntries]);
 
+  const handleDeleteSet = async (testType, setKey) => {
+    const confirmed = window.confirm(
+      `Bạn có chắc muốn xóa bộ đề ${setKey}?\nHành động này sẽ xóa toàn bộ câu hỏi và ảnh Firebase liên quan.`
+    );
+    if (!confirmed) return;
+
+    const rowKey = `${testType}:${setKey}`;
+    setDeletingKey(rowKey);
+    setActionMessage("");
+    try {
+      const response = await fetch(
+        `/api/sets?testType=${testType}&setKey=${encodeURIComponent(setKey)}`,
+        { method: "DELETE" }
+      );
+      const payload = await response.json().catch(() => ({}));
+      if (!response.ok) throw new Error(payload.error || "Xóa bộ đề thất bại.");
+      const deletedCount = Number(payload?.firebaseCleanup?.deletedCount || 0);
+      const failedCount = Number(payload?.firebaseCleanup?.failedCount || 0);
+      setListenSets((prev) => prev.filter((s) => s.setKey !== setKey || testType !== "listen"));
+      setReadingSets((prev) => prev.filter((s) => s.setKey !== setKey || testType !== "reading"));
+      setCounts((prev) => {
+        const next = { ...prev };
+        delete next[rowKey];
+        return next;
+      });
+      setActionMessage(
+        `Đã xóa ${setKey}. Đã dọn ${deletedCount} ảnh Firebase${
+          failedCount > 0 ? `, lỗi ${failedCount} ảnh` : ""
+        }.`
+      );
+    } catch (error) {
+      setActionMessage(error.message || "Không thể xóa bộ đề.");
+    } finally {
+      setDeletingKey("");
+    }
+  };
+
   return (
     <div className="space-y-10">
       <div className="flex flex-wrap items-end justify-between gap-4">
@@ -190,6 +238,11 @@ export default function AdminBoDeGridPage() {
           Tạo đề mới
         </Link>
       </div>
+      {actionMessage ? (
+        <p className="rounded-lg border border-rose-200 bg-rose-50 px-3 py-2 text-sm text-rose-800">
+          {actionMessage}
+        </p>
+      ) : null}
 
       {loading ? (
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
@@ -221,6 +274,8 @@ export default function AdminBoDeGridPage() {
                   testType="listen"
                   setRow={s}
                   count={counts[`listen:${s.setKey}`]}
+                  deleting={deletingKey === `listen:${s.setKey}`}
+                  onDelete={handleDeleteSet}
                 />
               ))}
             </div>
@@ -244,6 +299,8 @@ export default function AdminBoDeGridPage() {
                   testType="reading"
                   setRow={s}
                   count={counts[`reading:${s.setKey}`]}
+                  deleting={deletingKey === `reading:${s.setKey}`}
+                  onDelete={handleDeleteSet}
                 />
               ))}
             </div>

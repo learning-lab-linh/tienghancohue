@@ -5,9 +5,31 @@ import { AnswerComponent } from "../../components/AnswerComponent";
 import QuestionContent from "../../components/QuestionContent";
 import TestingLayout from "../../layouts/TestingLayout";
 import '../../styles/style.css';
-import 'react-notifications/lib/notifications.css';
-import { NotificationContainer, NotificationManager } from 'react-notifications';
 import AudioPlayer from "@/app/components/AudioComponent";
+
+function runSubmitConfetti() {
+  import("canvas-confetti")
+    .then(({ default: confetti }) => {
+      confetti({
+        particleCount: 120,
+        spread: 75,
+        startVelocity: 40,
+        origin: { y: 0.65 },
+      });
+      setTimeout(() => {
+        confetti({
+          particleCount: 80,
+          spread: 95,
+          startVelocity: 32,
+          origin: { y: 0.7 },
+        });
+      }, 180);
+    })
+    .catch((error) => {
+      console.warn("Không chạy được hiệu ứng confetti:", error);
+    });
+}
+
 const ListenTest = () => {
   const TEST_DURATION_SECONDS = 60 * 60;
   const [selectedSet, setSelectedSet] = useState(null);
@@ -19,6 +41,7 @@ const ListenTest = () => {
   const [questions, setQuestions] = useState([]);
   const [showTracking, setShowTracking] = useState(true);
   const [score, setScore] = useState();
+  const [showScoreOverlay, setShowScoreOverlay] = useState(false);
   const [timeLeft, setTimeLeft] = useState(TEST_DURATION_SECONDS);
   const [audio, setAudio] = useState('');
   const [isLoading, setIsLoading] = useState(false);
@@ -44,10 +67,6 @@ const ListenTest = () => {
       } catch (error) {
         console.error("Không thể tải danh sách bộ đề nghe:", error);
         setAvailableSets([]);
-        NotificationManager.warning(
-          "Mạng đang yếu hoặc mất kết nối. Không tải được danh sách bộ đề.",
-          "Lỗi kết nối"
-        );
       }
     };
     fetchSets();
@@ -74,20 +93,12 @@ const ListenTest = () => {
             "Đề này hiện chưa có audio hoặc audio đang tạm thời không khả dụng.";
           setAudioWarning(warningText);
           console.warn("[Listen] Missing audio for set:", selectedSet, payload);
-          NotificationManager.warning(
-            warningText,
-            "Thiếu audio"
-          );
         }
       } catch (error) {
         console.error("Không thể tải bộ đề nghe:", error);
         setQuestionsSet([]);
         setAudio("");
         setLoadError("Không tải được đề thi. Vui lòng kiểm tra mạng rồi thử lại.");
-        NotificationManager.error(
-          "Không tải được đề thi. Vui lòng kiểm tra kết nối mạng.",
-          "Lỗi tải đề"
-        );
       } finally {
         setIsLoading(false);
       }
@@ -134,6 +145,7 @@ const ListenTest = () => {
     const scores = calculateScore();
 
     setScore(scores);
+    setShowScoreOverlay(true);
     try {
       await fetch("/api/results", {
         method: "POST",
@@ -151,7 +163,7 @@ const ListenTest = () => {
       console.error("Không thể lưu kết quả bài nghe:", error);
     }
 
-    NotificationManager.success(`Số điểm của bạn là ${scores}`, "Kết quả");
+    runSubmitConfetti();
   };
 
   const handleJumpToQuestion = (questionNumber) => {
@@ -179,7 +191,20 @@ const ListenTest = () => {
       answeredQuestions={answeredQuestions}
       selectedSet={selectedSet}
     >
-      <NotificationContainer />
+      {showScoreOverlay ? (
+        <div
+          className="fixed inset-0 z-[70] flex items-center justify-center bg-black/10 px-4"
+          onClick={() => setShowScoreOverlay(false)}
+        >
+          <div
+            className="rounded-2xl border border-emerald-200 bg-white/95 px-8 py-6 text-center shadow-2xl backdrop-blur-sm"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <p className="text-sm font-medium text-slate-500">Kết quả của bạn</p>
+            <p className="mt-1 text-3xl font-bold text-emerald-600">{score} điểm</p>
+          </div>
+        </div>
+      ) : null}
       {audio && (
        <AudioPlayer audio={audio} />
       )}
@@ -205,11 +230,11 @@ const ListenTest = () => {
             <div
               key={questionNumber}
               id={`question${questionNumber}`}
-              className="scroll-mt-28"
+              className="scroll-mt-28 mb-10 last:mb-0"
             >
               <QuestionContent question={question} questionNumber={questionNumber} />
 
-              <div className="my-4 grid grid-cols-2 gap-2">
+              <div className="my-1 grid grid-cols-4 gap-px sm:grid-cols-2">
                 {question.options.map((option, index) => (
                   <AnswerComponent
                     key={index}
