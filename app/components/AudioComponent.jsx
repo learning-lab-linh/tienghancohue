@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import "../styles/style.css";
 import { IoIosPause } from "react-icons/io";
 import { FaPlay } from "react-icons/fa";
@@ -6,8 +6,27 @@ import { MdReplay } from "react-icons/md";
 
 const AudioPlayer = ({ audio }) => {
   const audioRef = useRef(null);
+  const hasRetriedRef = useRef(false);
   const [isPlaying, setIsPlaying] = useState(false);
   const [audioNotice, setAudioNotice] = useState("");
+  const [audioSrc, setAudioSrc] = useState(audio || "");
+
+  useEffect(() => {
+    setAudioSrc(audio || "");
+    hasRetriedRef.current = false;
+    setAudioNotice("");
+    setIsPlaying(false);
+  }, [audio]);
+
+  const withCacheBust = (url) => {
+    try {
+      const parsed = new URL(url, window.location.origin);
+      parsed.searchParams.set("_retry", String(Date.now()));
+      return parsed.toString();
+    } catch {
+      return `${url}${url.includes("?") ? "&" : "?"}_retry=${Date.now()}`;
+    }
+  };
 
   const handlePlayPause = async () => {
     if (!audioRef.current) return;
@@ -52,19 +71,18 @@ const AudioPlayer = ({ audio }) => {
           <audio
             ref={audioRef}
             onEnded={handleEnded}
-            onWaiting={() =>
-              setAudioNotice("Mạng đang yếu, audio đang tải thêm...")
-            }
-            onStalled={() =>
-              setAudioNotice("Kết nối không ổn định. Thử chờ một chút hoặc phát lại.")
-            }
             onCanPlay={() => setAudioNotice("")}
             onPlaying={() => setAudioNotice("")}
-            onError={() =>
-              setAudioNotice("Không tải được audio. Vui lòng thử lại sau.")
-            }
+            onError={() => {
+              if (!hasRetriedRef.current && audioSrc) {
+                hasRetriedRef.current = true;
+                setAudioSrc(withCacheBust(audioSrc));
+                return;
+              }
+              setAudioNotice("Không tải được audio. Vui lòng thử lại sau.");
+            }}
           >
-            <source src={audio} type="audio/mp3" />
+            <source src={audioSrc} type="audio/mpeg" />
             Your browser does not support the audio element.
           </audio>
           <p className="mb-2 text-xs font-semibold tracking-wide text-slate-500">
