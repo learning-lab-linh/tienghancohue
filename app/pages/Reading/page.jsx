@@ -33,6 +33,8 @@ const ReadingTest = () => {
   const TEST_DURATION_SECONDS = 70 * 60;
   const [selectedSet, setSelectedSet] = useState(null);
   const [availableSets, setAvailableSets] = useState([]);
+  const [setsLoading, setSetsLoading] = useState(true);
+  const [setsError, setSetsError] = useState("");
   const [answers, setAnswers] = useState({});
   const [answeredQuestions, setAnsweredQuestions] = useState([]);
   const [showResults, setShowResults] = useState(false);
@@ -50,23 +52,28 @@ const ReadingTest = () => {
     const fetchSets = async () => {
       try {
         const response = await fetch("/api/sets?testType=reading");
+        if (!response.ok) throw new Error("Không tải được danh sách bộ đề.");
         const payload = await response.json();
         setAvailableSets(payload.data || []);
       } catch (error) {
         console.error("Không thể tải danh sách bộ đề đọc:", error);
         setAvailableSets([]);
+        setSetsError("Không tải được danh sách bộ đề đọc. Vui lòng tải lại trang.");
+      } finally {
+        setSetsLoading(false);
       }
     };
     fetchSets();
   }, []);
 
   useEffect(() => {
+    if (!selectedSet) return;
     const timer = setInterval(() => {
       setTimeLeft((prevTimeLeft) => Math.max(prevTimeLeft - 1, 0));
     }, 1000);
 
     return () => clearInterval(timer);
-  }, []);
+  }, [selectedSet]);
 
   useEffect(() => {
     const fetchQuestions = async () => {
@@ -157,7 +164,7 @@ const ReadingTest = () => {
   };
 
   if (!selectedSet) {
-    return <SetSelection onSelectSet={setSelectedSet} sets={availableSets} />;
+    return <SetSelection onSelectSet={setSelectedSet} sets={availableSets} testType="reading" loading={setsLoading} error={setsError} />;
   }
 
   return (

@@ -34,6 +34,8 @@ const ListenTest = () => {
   const TEST_DURATION_SECONDS = 60 * 60;
   const [selectedSet, setSelectedSet] = useState(null);
   const [availableSets, setAvailableSets] = useState([]);
+  const [setsLoading, setSetsLoading] = useState(true);
+  const [setsError, setSetsError] = useState("");
   const [answers, setAnswers] = useState({});
   const [answeredQuestions, setAnsweredQuestions] = useState([]);
   const [showResults, setShowResults] = useState(false);
@@ -51,22 +53,27 @@ const ListenTest = () => {
     availableSets.findIndex((item) => item.setKey === selectedSet) + 1;
 
   useEffect(() => {
+    if (!selectedSet) return;
     const timer = setInterval(() => {
       setTimeLeft((prevTimeLeft) => Math.max(prevTimeLeft - 1, 0));
     }, 1000);
 
     return () => clearInterval(timer);
-  }, []);
+  }, [selectedSet]);
 
   useEffect(() => {
     const fetchSets = async () => {
       try {
         const response = await fetch("/api/sets?testType=listen");
+        if (!response.ok) throw new Error("Không tải được danh sách bộ đề.");
         const payload = await response.json();
         setAvailableSets(payload.data || []);
       } catch (error) {
         console.error("Không thể tải danh sách bộ đề nghe:", error);
         setAvailableSets([]);
+        setSetsError("Không tải được danh sách bộ đề nghe. Vui lòng tải lại trang.");
+      } finally {
+        setSetsLoading(false);
       }
     };
     fetchSets();
@@ -172,7 +179,7 @@ const ListenTest = () => {
   };
 
   if (!selectedSet) {
-    return <SetSelection onSelectSet={setSelectedSet} sets={availableSets} />;
+    return <SetSelection onSelectSet={setSelectedSet} sets={availableSets} testType="listen" loading={setsLoading} error={setsError} />;
   }
 
   return (
